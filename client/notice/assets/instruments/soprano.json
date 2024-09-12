@@ -1,0 +1,13 @@
+{
+  "name": "Sopranblockflöte",
+  "cleff": "treble",
+  "notes": [
+    {
+      "note": "c",
+      "soundFile": "soprano/c.mp3",
+      "fingeringPicture": "generic_fingerings/0.svg",
+      "minFrequency": 0,
+      "maxFrequency": 0
+    }
+  ]
+}
