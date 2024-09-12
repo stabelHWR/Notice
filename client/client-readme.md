@@ -20,6 +20,14 @@ Your development and test device should be in the same network!
 3. Check if it working
 4. Get Started! <https://docs.expo.dev/get-started/start-developing/>
 
+## Test on emulator
+
+1. Download [Android Studios](https://developer.android.com/studio)
+2. Click `More Actions` > `Virtual Device Manager`
+3. Add a device
+4. Open the `Virtual Device Manager`
+5. Follow the [instructions](https://docs.expo.dev/workflow/android-studio-emulator/) for your OS
+
 ## For optimal dev expirience
 
 Set up prettier and eslint. I have already set up the necessary files, but you still need to do somthing.

@@ -1,0 +1,6 @@
+type CoordinatesTuple = {
+  x: number;
+  y: number;
+};
+
+export type { CoordinatesTuple };

@@ -1,71 +1,51 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { RecordGradientButton, RectangleGradientButton } from '@/components/GradientButton';
+import { GradientHeading } from '@/components/TextElements';
+import { Inter_900Black, Inter_500Medium, useFonts } from '@expo-google-fonts/inter';
+import * as SplashScreen from 'expo-splash-screen';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView } from 'react-native';
+import { VStack } from '@/components/ui/vstack';
+import { containerStayles } from '@/components/styles';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+SplashScreen.preventAutoHideAsync();
 
-export default function HomeScreen() {
+export default function RootLayout() {
+  const [loaded, error] = useFonts({
+    Inter_900Black,
+    Inter_500Medium,
+  });
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (loaded || error) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded, error]);
+
+  if (!loaded && !error) {
+    return null;
+  }
+  const openPopup = () => {
+    console.log('hi');
+    setVisible(true);
+  };
+
+  const closePopup = () => {
+    setVisible(false);
+  };
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }
-    >
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({ ios: 'cmd + d', android: 'cmd + m' })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <VStack style={containerStayles.mainCentralContainer}>
+      <GradientHeading type="heading" displayedText={'heading'} />
+      <GradientHeading type="subheading" displayedText={'subheading'} />
+
+      <RecordGradientButton
+        isRecording={true}
+        onPress={function (): void {
+          console.log('is recording');
+        }}
+      />
+      <RectangleGradientButton displayedText={'hihi'} onPress={openPopup} />
+    </VStack>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
