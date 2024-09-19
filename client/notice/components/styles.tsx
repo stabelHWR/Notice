@@ -1,4 +1,4 @@
-import { backgroundColor, secondaryColorNeonBlue } from '@/constants/Colors';
+import { secondaryColorNeonBlue } from '@/constants/Colors';
 import { StyleSheet } from 'react-native';
 
 const shadowStyles = {
@@ -21,13 +21,18 @@ const popupContent = {
   borderRadius: 10,
 };
 
-const containerStayles = StyleSheet.create({
+const containerStyles = StyleSheet.create({
   mainCentralContainer: {
     alignItems: 'center',
-    backgroundColor: backgroundColor,
+    justifyContent: 'space-evenly',
     flex: 1,
-    justifyContent: 'center',
-    marginVertical: 20,
+  },
+  mainFlexStartContainer: {
+    alignItems: 'stretch',
+    justifyContent: 'flex-start',
+  },
+  horizontalCentralContainer: {
+    flexDirection: 'row',
   },
 });
-export { shadowStyles, popupContent, containerStayles };
+export { shadowStyles, popupContent, containerStyles };

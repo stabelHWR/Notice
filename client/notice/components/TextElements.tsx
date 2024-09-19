@@ -4,13 +4,13 @@ import { Center } from '@/components/ui/center';
 import { GradientText } from './Gradients';
 import { secondaryColorNeonBlue } from '@/constants/Colors';
 
-type TextProps = {
+interface TextProps {
   displayedText: string;
-};
+}
 
-type GradientHeadingProps = TextProps & {
+interface GradientHeadingProps extends TextProps {
   type: 'heading' | 'subheading';
-};
+}
 
 const InfoText: React.FC<TextProps> = ({ displayedText }) => {
   return (
@@ -33,14 +33,11 @@ const BoldText: React.FC<TextProps> = ({ displayedText }) => {
 };
 
 const GradientHeading: React.FC<GradientHeadingProps> = ({ type, displayedText }) => {
+  const size = type === 'heading' ? '5xl' : '3xl';
   return (
     <Center>
       <GradientText>
-        {type === 'heading' ? (
-          <Heading size="5xl">{displayedText}</Heading>
-        ) : (
-          <Heading size="3xl">{displayedText}</Heading>
-        )}
+        <Heading size={size}>{displayedText}</Heading>
       </GradientText>
     </Center>
   );

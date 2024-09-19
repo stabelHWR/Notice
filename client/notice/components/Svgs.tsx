@@ -2,18 +2,18 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Svg, Path, Defs, LinearGradient, Stop, Circle, G, Line } from 'react-native-svg';
 
-type SvgProps = {
+interface SvgProps {
   width: number;
   height: number;
-};
+}
 
-type CombinedSvgProps = SvgProps & {
+interface CombinedSvgProps extends SvgProps {
   top: number;
   left: number;
   buttonWidth: number;
   buttonHeight: number;
-};
-type CombinedSvgCircleSidefluteSidebuttonsThreenotesProps = CombinedSvgProps & {
+}
+interface CombinedSvgCircleSidefluteSidebuttonsThreenotesProps extends CombinedSvgProps {
   buttonTop: number;
   buttonLeft: number;
   noteHeight: number;
@@ -24,7 +24,7 @@ type CombinedSvgCircleSidefluteSidebuttonsThreenotesProps = CombinedSvgProps & {
   circleTop: number;
   circlWidth: number;
   circleHeight: number;
-};
+}
 
 const FluteVector: React.FC<SvgProps> = ({ width, height }) => {
   return (

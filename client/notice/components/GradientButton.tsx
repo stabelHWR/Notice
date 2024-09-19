@@ -17,22 +17,23 @@ import {
 } from 'lucide-react-native';
 import { Icon } from '@/components/ui/icon';
 
-type GradientButtonProps = {
-  onPress: (event: GestureResponderEvent) => void;
+interface GradientButtonProps {
+  onPress?: (event: GestureResponderEvent) => void;
   displayedText: string;
-};
-type RoundButtonProps = GradientButtonProps & {
+}
+interface RoundButtonProps extends GradientButtonProps {
   icon: LucideIcon;
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'xs';
-};
+}
 
-type RecordButtonProps = Omit<GradientButtonProps, 'displayedText'> & {
+interface RecordButtonProps extends Omit<GradientButtonProps, 'displayedText'> {
   isRecording: boolean;
-};
+}
 
-type GradientIconButtonProps = Omit<RoundButtonProps, 'displayedText'> & {
+interface GradientIconButtonProps extends Omit<RoundButtonProps, 'displayedText'> {
   hasFill?: boolean;
-};
+}
+
 type ScrollLeftAndRightButtonProps = Omit<GradientIconButtonProps, 'hasFill' | 'icon'> & {
   isLeft: boolean;
 };

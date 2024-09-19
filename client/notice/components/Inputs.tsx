@@ -6,19 +6,24 @@ import { useState } from 'react';
 import { VStack } from './ui/vstack';
 import { BoldText } from './TextElements';
 
-type InputProps = {
+interface InputProps {
   displayedText: string;
-};
-type SelectProps = InputProps & {
-  selectItems: string[];
-};
+}
+interface SelectProps extends InputProps {
+  selectedItems: string[];
+}
 
-const CustomDropdown: React.FC<SelectProps> = ({ displayedText, selectItems }) => {
-  const [check1, setCheck1] = useState(false);
+const CustomDropdown: React.FC<SelectProps> = ({ displayedText, selectedItems }) => {
+  const [selectedItem, setSelectedItem] = useState<string | null>(null);
+
+  const handlePress = (item: string) => {
+    setSelectedItem(selectedItem === item ? null : item); // Toggle selection
+  };
+
   return (
     <VStack style={{ backgroundColor: backgroundColor }}>
       <BoldText displayedText={displayedText} />
-      {selectItems.map((selectItem, index) => (
+      {selectedItems.map((selectItem, index) => (
         <CheckBox
           key={index}
           center
@@ -27,8 +32,8 @@ const CustomDropdown: React.FC<SelectProps> = ({ displayedText, selectItems }) =
           uncheckedIcon="circle-o"
           checkedColor={secondaryColorNeonBlue}
           uncheckedColor={secondaryColorNeonBlue}
-          onPress={() => setCheck1(!check1)}
-          checked={check1}
+          onPress={() => handlePress(selectItem)}
+          checked={selectedItem === selectItem}
           containerStyle={{
             backgroundColor: backgroundColor,
             alignContent: 'flex-start',

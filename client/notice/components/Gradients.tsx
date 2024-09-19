@@ -1,6 +1,6 @@
 import { startGradientCoordinates, endGradientCoordinates } from '@/constants/Coordinates';
 import React from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { Text } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { GradientColors } from '@/constants/Colors';
 import MaskedView from '@react-native-masked-view/masked-view';
@@ -12,18 +12,23 @@ const PrimaryGradientColors = [
 ];
 const SecondaryGradientColors = [GradientColors.neonBlue, GradientColors.vividSkyBlue];
 
-type GradientHeadingProps = {
+interface GradientHeadingProps {
   children: React.ReactNode;
   gradientColors: string[];
   style: object;
-};
+}
 
-type GradientTextProps = GradientHeadingProps & {
+interface GradientTextProps {
   children: React.ReactNode;
   maskElement?: React.ReactElement;
   hiddenElement?: React.ReactElement;
   style?: object;
-};
+}
+
+interface DefinedGradientProps {
+  children: React.ReactNode;
+  style: object;
+}
 
 const Gradient: React.FC<GradientHeadingProps> = ({ children, gradientColors, style }) => {
   return (
@@ -36,11 +41,6 @@ const Gradient: React.FC<GradientHeadingProps> = ({ children, gradientColors, st
       {children}
     </LinearGradient>
   );
-};
-
-type DefinedGradientProps = {
-  children: React.ReactNode;
-  style: object;
 };
 
 const MainGradient: React.FC<DefinedGradientProps> = ({ children, style }) => {
@@ -65,8 +65,8 @@ const GradientText: React.FC<GradientTextProps> = ({
   hiddenElement,
 }) => {
   const defaultMaskElement = <Text style={[style, { color: 'black' }]}>{children}</Text>;
-
   const defaultHiddenElement = <Text style={[style, { opacity: 0 }]}>{children}</Text>;
+
   return (
     <MaskedView maskElement={maskElement || defaultMaskElement}>
       <LinearGradient
