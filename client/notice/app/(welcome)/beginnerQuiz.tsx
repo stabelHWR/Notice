@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import { RectangleGradientButton } from '@/components/GradientButton';
 import { Logo } from '@/components/Images';
 import { CustomDropdown, CustomInput } from '@/components/Inputs';
@@ -8,7 +9,6 @@ import { HStack } from '@/components/ui/hstack';
 import { VStack } from '@/components/ui/vstack';
 import { questions } from '@/constants/texts/Questions';
 import { APP_NAME } from '@/constants/texts/Strings';
-import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import i18n from '@/constants/texts/Translations';
 

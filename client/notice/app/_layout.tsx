@@ -1,7 +1,7 @@
+import React, { useEffect } from 'react';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
 import 'react-native-reanimated';
 import { Inter_900Black, Inter_500Medium, useFonts } from '@expo-google-fonts/inter';
 import { useColorScheme } from '@/hooks/useColorScheme';

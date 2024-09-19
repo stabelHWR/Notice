@@ -1,3 +1,5 @@
+import React from 'react';
+import PropTypes from 'prop-types';
 import { RectangleGradientButton } from '@/components/GradientButton';
 import { GradientHeading } from '@/components/TextElements';
 import { VStack } from '@/components/ui/vstack';
@@ -27,6 +29,10 @@ const WelcomeOrRegisterPage: React.FC<WelcomeOrRegisterPageProps> = ({ isWelcome
       <RectangleGradientButton displayedText={text} onPress={() => router.push(link)} />
     </VStack>
   );
+};
+
+WelcomeOrRegisterPage.propTypes = {
+  isWelcomePage: PropTypes.bool.isRequired,
 };
 
 export default WelcomeOrRegisterPage;

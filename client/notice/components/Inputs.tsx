@@ -1,9 +1,10 @@
+import React from 'react';
 import { Input } from '@rneui/base';
 import { secondaryColorNeonBlue, backgroundColor, StatusColors } from '@/constants/Colors';
 import { CheckBox } from '@rneui/themed';
+import { VStack } from '@/components/ui/vstack';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useState } from 'react';
-import { VStack } from './ui/vstack';
 import { BoldText } from './TextElements';
 
 interface InputProps {
