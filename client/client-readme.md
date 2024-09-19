@@ -27,6 +27,8 @@ Your development and test device should be in the same network!
 3. Add a device
 4. Open the `Virtual Device Manager`
 5. Follow the [instructions](https://docs.expo.dev/workflow/android-studio-emulator/) for your OS
+6. `npx expo start`
+7. Type `a` in to the terminal
 
 ## For optimal dev expirience
 

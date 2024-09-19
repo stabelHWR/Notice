@@ -15,7 +15,7 @@ interface WelcomeOrRegisterPageProps {
 const WelcomeOrRegisterPage: React.FC<WelcomeOrRegisterPageProps> = ({ isWelcomePage }) => {
   const router = useRouter();
   const text = isWelcomePage ? i18n.t('welcome') : i18n.t('tellUsAboutYourself');
-  const link = isWelcomePage ? './beginnerQuiz' : './home';
+  const link = isWelcomePage ? './home' : './beginnerQuiz';
 
   return (
     <VStack style={containerStyles.mainCentralContainer}>
