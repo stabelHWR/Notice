@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Image } from '@/components/ui/image';
 
 const imagePath = '@/assets/images';
@@ -9,34 +8,17 @@ interface ImageProps {
 }
 
 const Logo: React.FC<ImageProps> = ({ size }) => {
-  const picWidth = size === 'large' ? 212 : size === 'medium' ? 92 : 50;
-  const picHeight = size === 'large' ? 211 : size === 'medium' ? 95 : 50;
-
-  return (
-    <Image
-      source={require(`${imagePath}/icon.png`)}
-      alt="Logo"
-      width={picWidth}
-      height={picHeight}
-    />
-  );
+  const pickedSize = size === 'large' ? 'lg' : size === 'medium' ? 'md' : 'xs';
+  const pickedImage =
+    size === 'large' || size === 'medium'
+      ? require(`${imagePath}/icon.png`)
+      : require(`${imagePath}/favicon.png`);
+  return <Image source={pickedImage} alt="Logo" size={pickedSize} />;
 };
 
 const Note: React.FC<ImageProps> = ({ size }) => {
-  const picWidth = size === 'large' ? 212 : size === 'medium' ? 92 : 50;
-  const picHeight = size === 'large' ? 211 : size === 'medium' ? 95 : 50;
-  return (
-    <Image
-      source={require(`${imagePath}/notes.png`)}
-      alt="Logo"
-      width={picWidth}
-      height={picHeight}
-    />
-  );
-};
-
-ImageProps.propTypes = {
-  size: PropTypes.string.isRequired,
+  const pickedSize = size === 'large' ? 'lg' : size === 'medium' ? 'md' : 'xs';
+  return <Image source={require(`${imagePath}/notes.png`)} size={pickedSize} alt="Logo" />;
 };
 
 export { Logo, Note };

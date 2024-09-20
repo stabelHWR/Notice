@@ -18,7 +18,7 @@ import {
 import { Icon } from '@/components/ui/icon';
 
 interface GradientButtonProps {
-  onPress?: (event: GestureResponderEvent) => void;
+  onPress: (event: GestureResponderEvent) => void;
   displayedText: string;
 }
 interface RoundButtonProps extends GradientButtonProps {
@@ -40,7 +40,7 @@ type ScrollLeftAndRightButtonProps = Omit<GradientIconButtonProps, 'hasFill' | '
 
 const RectangleGradientButton: React.FC<GradientButtonProps> = ({ onPress, displayedText }) => {
   return (
-    <Button style={styles.rectangleButton} onPress={onPress}>
+    <Button style={styles.rectangleButton} onPress={onPress} size="xl" variant="solid">
       <MainGradient style={styles.linearGradient}>
         <ButtonText style={styles.largeButtonText}>{displayedText}</ButtonText>
       </MainGradient>

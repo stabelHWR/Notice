@@ -7,7 +7,7 @@ import { Inter_900Black, Inter_500Medium, useFonts } from '@expo-google-fonts/in
 import { useColorScheme } from '@/hooks/useColorScheme';
 
 SplashScreen.preventAutoHideAsync();
-
+//TODO remove upper index bar
 export default function RootLayout() {
   const colorScheme = useColorScheme();
 

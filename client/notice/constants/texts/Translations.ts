@@ -11,6 +11,10 @@ const translationsObj = {
     choices3: 'choices3',
     question2: 'question2Question',
     submit: 'Submit',
+    practice: 'Practice',
+    tutorials: 'Tutorials',
+    progress: 'Progress',
+    settings: 'Settings',
   },
   de: {
     welcome: 'Wilkommen',
@@ -21,6 +25,10 @@ const translationsObj = {
     choices3: 'auswahl3',
     question2: 'Frage2',
     submit: 'Weiter',
+    practice: 'Übungen',
+    tutorials: 'Tutorials',
+    progress: 'Fortschritt',
+    settings: 'Einstellungen',
   },
 };
 

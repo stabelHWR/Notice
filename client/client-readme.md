@@ -5,7 +5,7 @@
 React Native is a framework, which allows you to build native mobile apps using JavaScript/TypeScript and React. It's used here to create the core structure of the app for Android and iOS devices, providing cross-platform support.
 
 1. npx create-expo-app@latest
-2. isntall expo app in [Google Play Store](https://play.google.com/store/apps/details?id=host.exp.exponent)
+2. install expo app in [Google Play Store](https://play.google.com/store/apps/details?id=host.exp.exponent)
 3. look it up for your OS <https://reactnative.dev/docs/set-up-your-environment?platform=android>
 4. `cd client/notice`
 
