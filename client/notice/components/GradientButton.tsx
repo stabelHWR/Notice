@@ -14,6 +14,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronDown,
+  X,
 } from 'lucide-react-native';
 import { Icon } from '@/components/ui/icon';
 
@@ -32,6 +33,7 @@ interface RecordButtonProps extends Omit<GradientButtonProps, 'displayedText'> {
 
 interface GradientIconButtonProps extends Omit<RoundButtonProps, 'displayedText'> {
   hasFill?: boolean;
+  style?: Record<string, any>;
 }
 
 type ScrollLeftAndRightButtonProps = Omit<GradientIconButtonProps, 'hasFill' | 'icon'> & {
@@ -83,13 +85,27 @@ const GradientIconButton: React.FC<GradientIconButtonProps> = ({ onPress, icon, 
     </Pressable>
   );
 };
-const InfoButton: React.FC<Omit<GradientIconButtonProps, 'icon'>> = ({ onPress }) => {
+const InfoButton: React.FC<Omit<GradientIconButtonProps, 'icon' | 'style' | 'hasFill'>> = ({
+  onPress,
+}) => {
   return <GradientIconButton icon={Info} onPress={onPress} size="xl" hasFill={true} />;
 };
-const ScrollButtonDown: React.FC<Omit<GradientIconButtonProps, 'icon'>> = ({ onPress }) => {
+const CloseButton: React.FC<Omit<GradientIconButtonProps, 'icon' | 'hasFill'>> = ({ onPress }) => {
+  return (
+    <GradientIconButton
+      icon={X}
+      onPress={onPress}
+      size="xl"
+      hasFill={false}
+      style={styles.closeButton}
+    />
+  );
+};
+const ScrollButtonDown: React.FC<Omit<GradientIconButtonProps, 'icon' | 'style' | 'hasFill'>> = ({
+  onPress,
+}) => {
   return <GradientIconButton icon={ChevronDown} onPress={onPress} size="lg" hasFill={true} />;
 };
-
 const ScrollButton: React.FC<ScrollLeftAndRightButtonProps> = ({ onPress, isLeft }) => {
   const usedIcon = isLeft ? ChevronLeft : ChevronRight;
   return <GradientIconButton icon={usedIcon} onPress={onPress} size="lg" hasFill={false} />;
@@ -139,12 +155,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  closeButton: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    zIndex: 10,
+  },
 });
 
 export {
   RectangleGradientButton,
   RecordGradientButton,
-  InfoButton,
+  GradientIconButton,
   ScrollButtonDown,
   ScrollButton,
+  InfoButton,
+  CloseButton,
 };

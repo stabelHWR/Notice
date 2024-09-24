@@ -1,5 +1,6 @@
 import { getLocales } from 'expo-localization';
 import { I18n } from 'i18n-js';
+import { Volume } from 'lucide-react-native';
 
 const translationsObj = {
   en: {
@@ -15,6 +16,8 @@ const translationsObj = {
     tutorials: 'Tutorials',
     progress: 'Progress',
     settings: 'Settings',
+    name: 'Name',
+    volume: 'Volume',
   },
   de: {
     welcome: 'Wilkommen',
@@ -29,6 +32,8 @@ const translationsObj = {
     tutorials: 'Tutorials',
     progress: 'Fortschritt',
     settings: 'Einstellungen',
+    name: 'Name',
+    volume: 'Lautstärke',
   },
 };
 

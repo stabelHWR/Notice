@@ -27,6 +27,10 @@ const containerStyles = StyleSheet.create({
     justifyContent: 'space-evenly',
     flex: 1,
   },
+  mainContainerForPages: {
+    justifyContent: 'space-evenly',
+    flex: 1,
+  },
   mainFlexStartContainer: {
     alignItems: 'stretch',
     justifyContent: 'flex-start',

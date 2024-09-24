@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { RectangleGradientButton } from '@/components/GradientButton';
 import { Logo } from '@/components/Images';
 import { StyleSheet } from 'react-native';
@@ -7,12 +6,13 @@ import { ThreeNotes } from '@/components/Svgs';
 import { GradientHeading } from '@/components/TextElements';
 import { HStack } from '@/components/ui/hstack';
 import { VStack } from '@/components/ui/vstack';
-import { questions } from '@/constants/texts/Questions';
 import { APP_NAME } from '@/constants/texts/Strings';
 import i18n from '@/constants/texts/Translations';
 import { containerStyles } from '@/components/styles';
+import { useRouter } from 'expo-router';
 
 export default function BeginnerQuiz() {
+  const router = useRouter();
   return (
     <VStack style={containerStyles.mainCentralContainer}>
       <HStack space="md" style={containerStyles.horizontalCentralContainer}>
@@ -34,7 +34,7 @@ export default function BeginnerQuiz() {
         />
         <RectangleGradientButton
           displayedText={i18n.t('settings')}
-          onPress={() => console.log('settings')}
+          onPress={() => router.push('./settings')}
         />
       </VStack>
       <ThreeNotes width={100} height={100} />
