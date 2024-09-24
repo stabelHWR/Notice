@@ -3,7 +3,6 @@ import { Heading } from '@/components/ui/heading';
 import { Center } from '@/components/ui/center';
 import { GradientText } from './Gradients';
 import { secondaryColorNeonBlue } from '@/constants/Colors';
-
 interface TextProps {
   displayedText: string;
 }

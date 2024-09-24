@@ -38,5 +38,11 @@ const containerStyles = StyleSheet.create({
   horizontalCentralContainer: {
     flexDirection: 'row',
   },
+  buttonCointainer: {
+    justifyContent: 'space-evenly',
+    width: '100%',
+    alignItems: 'center',
+    height: '50%',
+  },
 });
 export { shadowStyles, popupContent, containerStyles };
