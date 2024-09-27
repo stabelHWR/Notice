@@ -17,6 +17,7 @@ import { Note, NoteName, NotePlay, PlayingStatus, RecordingStatus } from '@/type
 import { PlayedStatusIcon } from '@/components/Icons';
 import { NotePlayOnFluteImage } from '@/components/Images';
 import { STANDARD_NOTES } from '@/constants/Notes';
+import { url } from 'inspector';
 
 interface PracticeProps {
   selectedNote?: Note;
@@ -94,9 +95,11 @@ export default function Practice({ selectedNote }: PracticeProps) {
         });
 
         console.log('Starting recording..');
+
         const { recording: newRecording } = await Audio.Recording.createAsync(
           Audio.RecordingOptionsPresets.HIGH_QUALITY
         );
+        newRecording._uri = './record/location';
         setRecording(newRecording);
         console.log('Recording started');
       }
