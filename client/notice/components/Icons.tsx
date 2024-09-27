@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleProp, StyleSheet, ViewStyle } from 'react-native';
 import { FontColors, secondaryColorNeonBlue, StatusColors } from '@/constants/Colors';
 import { LucideIcon, BoxSelect, CircleX, CircleCheck } from 'lucide-react-native';
 import { MainGradient } from './Gradients';
@@ -11,7 +11,7 @@ interface IconProps {
   icon: LucideIcon;
   color?: string;
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'xs';
-  style?: React.CSSProperties;
+  style?: StyleProp<ViewStyle>;
 }
 
 interface StatusIconProps extends Omit<IconProps, 'icon'> {
@@ -26,7 +26,13 @@ const NormalIcon: React.FC<IconProps> = ({ icon, color }) => {
 const GradientIcon: React.FC<IconProps> = ({ icon, style }) => {
   return (
     <MainGradient style={styles.iconButtonHasFill}>
-      <Icon as={icon} color={FontColors.light.background} width={40} height={40} style={style} />
+      <Icon
+        as={icon}
+        color={FontColors.light.background}
+        width={40}
+        height={40}
+        style={style ? style : {}}
+      />
     </MainGradient>
   );
 };

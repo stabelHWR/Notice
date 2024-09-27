@@ -1,8 +1,18 @@
+import { STANDARD_NOTES, SHARP_NOTES, FLAT_NOTES } from '@/constants/Notes';
+
 type PlayingStatus = 'notPlayed' | 'failed' | 'success';
 type RecordingStatus = PlayingStatus | 'notRecordedInSession';
 
+type StandardNote = (typeof STANDARD_NOTES)[number];
+type SharpNote = (typeof SHARP_NOTES)[number];
+type FlatNote = (typeof FLAT_NOTES)[number];
+type NoteName = StandardNote | SharpNote | FlatNote;
+
 type Note = {
-  noteName: string;
+  noteName: StandardNote;
+  status: PlayingStatus;
+};
+type NotePlay = Note & {
   status: PlayingStatus;
 };
 
@@ -12,4 +22,4 @@ type Harmony = {
   notes: Note[];
 };
 
-export type { PlayingStatus, RecordingStatus, Note, Harmony };
+export type { PlayingStatus, RecordingStatus, NoteName, Note, NotePlay, Harmony };

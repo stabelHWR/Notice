@@ -10,6 +10,11 @@ const questions: Array<Question> = [
     questionName: 'question2',
     type: 'typeIn',
   },
+  {
+    questionName: 'question3',
+    type: 'testing',
+    noteTest: 'd',
+  },
 ];
 
 export { questions };

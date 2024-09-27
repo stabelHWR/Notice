@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ThreeNotes } from '@/components/Svgs';
-import { BoldText, GradientHeading, InfoText, StatusHeading } from '@/components/TextElements';
+import { BoldText, GradientHeading, StatusHeading } from '@/components/TextElements';
 import { HStack } from '@/components/ui/hstack';
 import { VStack } from '@/components/ui/vstack';
 import { Audio } from 'expo-av';
@@ -13,9 +13,10 @@ import {
 } from '@/components/GradientButton';
 import { useRouter } from 'expo-router';
 import soprano from '@/assets/instruments/soprano.json';
-import { Note, PlayingStatus, RecordingStatus } from '@/types/noteTypes';
+import { Note, NoteName, NotePlay, PlayingStatus, RecordingStatus } from '@/types/noteTypes';
 import { PlayedStatusIcon } from '@/components/Icons';
 import { NotePlayOnFluteImage } from '@/components/Images';
+import { STANDARD_NOTES } from '@/constants/Notes';
 
 interface PracticeProps {
   selectedNote?: Note;
@@ -43,7 +44,7 @@ const EvaluatedRecordingBox: React.FC<EvaluatedRecordingBoxProps> = ({
 //TODO: figure out how we are going to save the player status. Make a sperate file or save it in to the music files JSON. for now it is saved in the music files JSON
 export default function Practice({ selectedNote }: PracticeProps) {
   const router = useRouter();
-  const notesData = soprano.notes as Array<Note>;
+  const notesData = soprano.notes as Array<NotePlay>;
   const [currentNote, setCurrentNote] = useState(selectedNote ? selectedNote : notesData[0]);
   const [currentNoteIndex, setCurrentNoteIndex] = useState(
     selectedNote ? notesData.findIndex((note) => currentNote.noteName === note.noteName) : 0
@@ -141,12 +142,22 @@ export default function Practice({ selectedNote }: PracticeProps) {
       <VStack style={containerStyles.mainCentralContainer}>
         <HStack space="md" style={containerStyles.horizontalCentralContainer}>
           {resultStatus === 'notRecordedInSession' ? (
-            <GradientHeading type="heading" displayedText={currentNote.noteName} />
+            <GradientHeading
+              type="heading"
+              displayedText={
+                STANDARD_NOTES.includes(currentNote.noteName as NoteName)
+                  ? currentNote.noteName
+                  : ''
+              }
+            />
           ) : (
             <StatusHeading
               type="heading"
-              status={resultStatus}
-              displayedText={currentNote.noteName}
+              status={
+                (resultStatus as RecordingStatus) !== 'notRecordedInSession'
+                  ? resultStatus
+                  : 'notPlayed'
+              }
             />
           )}
           <PlayedStatusIcon status={resultStatus} />
