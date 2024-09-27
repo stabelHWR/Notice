@@ -1,3 +1,6 @@
+import { StatusColors, secondaryColorNeonBlue } from '@/constants/Colors';
+import { PlayingStatus } from '@/types/noteTypes';
+import { color } from '@rneui/base';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Svg, Path, Defs, LinearGradient, Stop, Circle, G, Line } from 'react-native-svg';
@@ -5,6 +8,9 @@ import { Svg, Path, Defs, LinearGradient, Stop, Circle, G, Line } from 'react-na
 interface SvgProps {
   width: number;
   height: number;
+}
+interface OneNoteProps extends SvgProps {
+  status?: PlayingStatus;
 }
 
 interface CombinedSvgProps extends SvgProps {
@@ -308,27 +314,39 @@ const ButtonIcons: React.FC<SvgProps> = ({ width, height }) => {
   );
 };
 
-const OneNote: React.FC<SvgProps> = ({ width, height }) => {
+const OneNote: React.FC<OneNoteProps> = ({ width, height, status }) => {
+  const noteColor =
+    status === 'notPlayed'
+      ? StatusColors.notPlayed.background
+      : status === 'failed'
+        ? StatusColors.error.background
+        : status === 'success'
+          ? StatusColors.success.background
+          : secondaryColorNeonBlue;
+
   return (
-    <Svg width={width} height={height} viewBox="0 0 19 38" fill="none">
-      <Defs>
-        <LinearGradient
-          id="paint0_linear_101_3564"
-          x1="9"
-          y1="0"
-          x2="9.83527"
-          y2="38.151"
-          gradientUnits="userSpaceOnUse"
-        >
-          <Stop offset="0" stopColor="#7011BA" />
-          <Stop offset="0.659159" stopColor="#485CEA" />
-          <Stop offset="1" stopColor="#4CC6EF" />
-        </LinearGradient>
-      </Defs>
-      <Path
-        d="M16.6599 29.0412L16.5555 27.9623C16.2437 26.6508 15.6558 25.421 14.8309 24.3549L14.6634 24.1384V5.57798V3.48624L19 0H10.8347V2.00459V4.00917V5.40367V10.633V22.4654L9.50417 22.1602C9.00348 22.0454 8.49144 21.9874 7.97774 21.9874C7.23665 21.9874 6.5005 22.1081 5.79818 22.3446L5.43965 22.4654L4.58582 22.8352C4.05381 23.0656 3.55554 23.3672 3.10468 23.7316C2.77013 24.0021 2.46367 24.3056 2.18997 24.6375L1.78515 25.1284C1.54144 25.4239 1.32082 25.7377 1.12525 26.0671L1.11532 26.0839C0.845586 26.5381 0.626031 27.0204 0.460526 27.5221C0.311537 27.9738 0.206396 28.4447 0.148009 28.9167C0.0507478 29.703 0.0783884 30.5093 0.232209 31.2865L0.236507 31.3082L0.367394 31.8372C0.593485 32.7511 0.988404 33.6147 1.53181 34.3834C1.77156 34.7226 2.03888 35.0415 2.33105 35.3367L2.51929 35.5269C2.88858 35.9001 3.2939 36.2358 3.72932 36.5291C4.23716 36.8713 4.78279 37.1536 5.35539 37.3706L5.37965 37.3798C6.04746 37.6328 6.74553 37.7974 7.45606 37.8692L7.55041 37.8787C8.34611 37.9591 9.14937 37.9194 9.93327 37.761L10.2923 37.6884C10.8398 37.5778 11.3742 37.4101 11.8868 37.1881C12.4744 36.9336 13.0293 36.6096 13.5396 36.2228L13.6132 36.167C14.3083 35.6402 14.9088 34.9991 15.3891 34.2712C15.8483 33.5751 16.1913 32.809 16.4048 32.0029L16.4252 31.9258C16.6742 30.9858 16.7537 30.009 16.6599 29.0412Z"
-        fill="url(#paint0_linear_101_3564)"
-      />
+    <Svg width={width} height={height} viewBox="0 0 19 38" fill="none" style={{ marginTop: 10 }}>
+      {noteColor ? (
+        <Path
+          d="M16.6599 29.0412L16.5555 27.9623C16.2437 26.6508 15.6558 25.421 14.8309 24.3549L14.6634 24.1384V5.57798V3.48624L19 0H10.8347V2.00459V4.00917V5.40367V10.633V22.4654L9.50417 22.1602C9.00348 22.0454 8.49144 21.9874 7.97774 21.9874C7.23665 21.9874 6.5005 22.1081 5.79818 22.3446L5.43965 22.4654L4.58582 22.8352C4.05381 23.0656 3.55554 23.3672 3.10468 23.7316C2.77013 24.0021 2.46367 24.3056 2.18997 24.6375L1.78515 25.1284C1.54144 25.4239 1.32082 25.7377 1.12525 26.0671L1.11532 26.0839C0.845586 26.5381 0.626031 27.0204 0.460526 27.5221C0.311537 27.9738 0.206396 28.4447 0.148009 28.9167C0.0507478 29.703 0.0783884 30.5093 0.232209 31.2865L0.236507 31.3082L0.367394 31.8372C0.593485 32.7511 0.988404 33.6147 1.53181 34.3834C1.77156 34.7226 2.03888 35.0415 2.33105 35.3367L2.51929 35.5269C2.88858 35.9001 3.2939 36.2358 3.72932 36.5291C4.23716 36.8713 4.78279 37.1536 5.35539 37.3706L5.37965 37.3798C6.04746 37.6328 6.74553 37.7974 7.45606 37.8692L7.55041 37.8787C8.34611 37.9591 9.14937 37.9194 9.93327 37.761L10.2923 37.6884C10.8398 37.5778 11.3742 37.4101 11.8868 37.1881C12.4744 36.9336 13.0293 36.6096 13.5396 36.2228L13.6132 36.167C14.3083 35.6402 14.9088 34.9991 15.3891 34.2712C15.8483 33.5751 16.1913 32.809 16.4048 32.0029L16.4252 31.9258C16.6742 30.9858 16.7537 30.009 16.6599 29.0412Z"
+          fill={noteColor}
+        />
+      ) : (
+        <Defs>
+          <LinearGradient
+            id="paint0_linear_101_3564"
+            x1="9"
+            y1="0"
+            x2="9.83527"
+            y2="38.151"
+            gradientUnits="userSpaceOnUse"
+          >
+            <Stop offset="0" stopColor="#7011BA" />
+            <Stop offset="0.659159" stopColor="#485CEA" />
+            <Stop offset="1" stopColor="#4CC6EF" />
+          </LinearGradient>
+        </Defs>
+      )}
     </Svg>
   );
 };

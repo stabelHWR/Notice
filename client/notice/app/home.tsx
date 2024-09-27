@@ -21,7 +21,7 @@ export default function BeginnerQuiz() {
       <VStack style={containerStyles.buttonCointainer}>
         <RectangleGradientButton
           displayedText={i18n.t('practice')}
-          onPress={() => console.log('practice')}
+          onPress={() => router.push('./practice')}
         />
         <RectangleGradientButton
           displayedText={i18n.t('tutorials')}

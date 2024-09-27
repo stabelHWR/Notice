@@ -15,11 +15,14 @@ const FontColors = {
   },
 };
 const StatusColors = {
-  success: {
-    background: '#11BA93',
+  notPlayed: {
+    background: secondaryColorNeonBlue,
   },
   error: {
     background: '#BA1111',
+  },
+  success: {
+    background: '#11BA93',
   },
 };
 

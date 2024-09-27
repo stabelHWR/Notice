@@ -1,0 +1,14 @@
+{
+  "name": "Sopranblockflöte",
+  "clef": "treble",
+  "notes": [
+    {
+      "noteName": "C",
+      "status": "notPlayed"
+    },
+    {
+      "noteName": "D",
+      "status": "failed"
+    }
+  ]
+}

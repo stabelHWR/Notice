@@ -9,11 +9,9 @@ import { HStack } from '@/components/ui/hstack';
 import { VStack } from '@/components/ui/vstack';
 import { questions } from '@/constants/texts/Questions';
 import { APP_NAME } from '@/constants/texts/Strings';
-import { useTranslation } from 'react-i18next';
 import i18n from '@/constants/texts/Translations';
 
 export default function BeginnerQuiz() {
-  const { t } = useTranslation();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(questions[currentQuestionIndex]);
 
@@ -36,10 +34,10 @@ export default function BeginnerQuiz() {
                 ? currentQuestion.choices.map((choice) => i18n.t(choice))
                 : ['']
             }
-            displayedText={t(currentQuestion.questionName)}
+            displayedText={i18n.t(currentQuestion.questionName)}
           />
         ) : (
-          <CustomInput displayedText={t(currentQuestion.questionName)} />
+          <CustomInput displayedText={i18n.t(currentQuestion.questionName)} />
         )}
       </VStack>
       <RectangleGradientButton

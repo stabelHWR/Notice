@@ -28,6 +28,8 @@ const translationsObj = {
     ringFinger: 'Ring Finger',
     littleFinger: 'Little Finger',
     thumb: 'Thumb',
+    wrong: 'Wrong',
+    great: 'Great',
   },
   de: {
     welcome: 'Wilkommen',
@@ -54,6 +56,8 @@ const translationsObj = {
     ringFinger: 'Ringfinger',
     littleFinger: 'Kleiner Finger',
     thumb: 'Daumen',
+    wrong: 'Falsch',
+    great: 'Super',
   },
 };
 
