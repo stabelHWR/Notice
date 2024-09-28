@@ -5,7 +5,7 @@
 React Native is a framework, which allows you to build native mobile apps using JavaScript/TypeScript and React. It's used here to create the core structure of the app for Android and iOS devices, providing cross-platform support.
 
 1. npx create-expo-app@latest
-2. isntall expo app in [Google Play Store](https://play.google.com/store/apps/details?id=host.exp.exponent)
+2. install expo app in [Google Play Store](https://play.google.com/store/apps/details?id=host.exp.exponent)
 3. look it up for your OS <https://reactnative.dev/docs/set-up-your-environment?platform=android>
 4. `cd client/notice`
 
@@ -19,6 +19,16 @@ Your development and test device should be in the same network!
 2. Scan the QR Code with your expo app
 3. Check if it working
 4. Get Started! <https://docs.expo.dev/get-started/start-developing/>
+
+## Test on emulator
+
+1. Download [Android Studios](https://developer.android.com/studio)
+2. Click `More Actions` > `Virtual Device Manager`
+3. Add a device
+4. Open the `Virtual Device Manager`
+5. Follow the [instructions](https://docs.expo.dev/workflow/android-studio-emulator/) for your OS
+6. `npx expo start`
+7. Type `a` in to the terminal
 
 ## For optimal dev expirience
 
