@@ -41,10 +41,7 @@ const EvaluatedRecordingBox: React.FC<EvaluatedRecordingBoxProps> = ({
     </VStack>
   );
 };
-
-//TODO: figure out how we are going to save the player status. Make a sperate file or save it in to the music files JSON. for now it is saved in the music files JSON
-export default function Practice({ selectedNote }: PracticeProps) {
-  const router = useRouter();
+const PracticePage: React.FC<PracticeProps> = ({ selectedNote }) => {
   const notesData = soprano.notes as Array<NotePlay>;
   const [currentNote, setCurrentNote] = useState(selectedNote ? selectedNote : notesData[0]);
   const [currentNoteIndex, setCurrentNoteIndex] = useState(
@@ -140,53 +137,59 @@ export default function Practice({ selectedNote }: PracticeProps) {
   };
 
   return (
-    <VStack style={containerStyles.mainContainerForPages}>
-      <CloseButton onPress={() => router.push('./home')} />
-      <VStack style={containerStyles.mainCentralContainer}>
-        <HStack space="md" style={containerStyles.horizontalCentralContainer}>
-          {resultStatus === 'notRecordedInSession' ? (
-            <GradientHeading
-              type="heading"
-              displayedText={
-                STANDARD_NOTES.includes(currentNote.noteName as NoteName)
-                  ? currentNote.noteName
-                  : ''
-              }
-            />
-          ) : (
-            <StatusHeading
-              type="heading"
-              status={
-                (resultStatus as RecordingStatus) !== 'notRecordedInSession'
-                  ? resultStatus
-                  : 'notPlayed'
-              }
-            />
-          )}
-          <PlayedStatusIcon status={resultStatus} />
-        </HStack>
-        <HStack
-          space="md"
-          style={[containerStyles.horizontalCentralContainer, { alignItems: 'center' }]}
-        >
-          {currentNoteIndex > 0 && !isRecording && (
-            <ScrollToTheSideButton onPress={() => changeNote(currentNoteIndex - 1)} isLeft={true} />
-          )}
+    <VStack style={containerStyles.mainCentralContainer}>
+      <HStack space="md" style={containerStyles.horizontalCentralContainer}>
+        {resultStatus === 'notRecordedInSession' ? (
+          <GradientHeading
+            type="heading"
+            displayedText={
+              STANDARD_NOTES.includes(currentNote.noteName as NoteName) ? currentNote.noteName : ''
+            }
+          />
+        ) : (
+          <StatusHeading
+            type="heading"
+            status={
+              (resultStatus as RecordingStatus) !== 'notRecordedInSession'
+                ? resultStatus
+                : 'notPlayed'
+            }
+          />
+        )}
+        <PlayedStatusIcon status={resultStatus} />
+      </HStack>
+      <HStack
+        space="md"
+        style={[containerStyles.horizontalCentralContainer, { alignItems: 'center' }]}
+      >
+        {currentNoteIndex > 0 && !isRecording && (
+          <ScrollToTheSideButton onPress={() => changeNote(currentNoteIndex - 1)} isLeft={true} />
+        )}
 
-          <NotePlayOnFluteImage noteName={currentNote.noteName} />
+        <NotePlayOnFluteImage noteName={currentNote.noteName} />
 
-          {currentNoteIndex < notesData.length - 1 && !isRecording && (
-            <ScrollToTheSideButton
-              onPress={() => changeNote(currentNoteIndex + 1)}
-              isLeft={false}
-            />
-          )}
-        </HStack>
-        {isRecording && <ThreeNotes width={100} height={100} />}
-        <EvaluatedRecordingBox evaluatedRecordingStatus={resultStatus} />
+        {currentNoteIndex < notesData.length - 1 && !isRecording && (
+          <ScrollToTheSideButton onPress={() => changeNote(currentNoteIndex + 1)} isLeft={false} />
+        )}
+      </HStack>
+      {isRecording && <ThreeNotes width={100} height={100} />}
+      <EvaluatedRecordingBox evaluatedRecordingStatus={resultStatus} />
 
-        <RecordGradientButton isRecording={!isRecording} onPress={() => startOrStopRecording()} />
-      </VStack>
+      <RecordGradientButton isRecording={!isRecording} onPress={() => startOrStopRecording()} />
     </VStack>
   );
-}
+};
+
+//TODO: figure out how we are going to save the player status. Make a sperate file or save it in to the music files JSON. for now it is saved in the music files JSON
+const Practice = ({ selectedNote }: PracticeProps) => {
+  const router = useRouter();
+
+  return (
+    <VStack style={containerStyles.mainContainerForPages}>
+      <CloseButton onPress={() => router.push('./home')} />
+      <PracticePage selectedNote={selectedNote} />
+    </VStack>
+  );
+};
+
+export { PracticePage, Practice };

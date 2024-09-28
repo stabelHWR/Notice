@@ -10,7 +10,7 @@ import { VStack } from '@/components/ui/vstack';
 import { questions } from '@/constants/texts/Questions';
 import { APP_NAME } from '@/constants/texts/Strings';
 import i18n from '@/constants/texts/Translations';
-import Practice from '../practice';
+import { PracticePage } from '../practice';
 
 export default function BeginnerQuiz() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -40,7 +40,7 @@ export default function BeginnerQuiz() {
         ) : currentQuestion.type === 'typeIn' ? (
           <CustomInput displayedText={i18n.t(currentQuestion.questionName)} />
         ) : (
-          <Practice />
+          <PracticePage />
         )}
       </VStack>
       <RectangleGradientButton
