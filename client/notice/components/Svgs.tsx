@@ -1,14 +1,22 @@
+import { setStatusColor } from '@/app/util/statusSetters';
 import { StatusColors, secondaryColorNeonBlue } from '@/constants/Colors';
+import { STROKE_WIDTH } from '@/constants/Sizes';
+import { CoordinatesTuple, PositionEnd } from '@/types/componentTypes';
 import { PlayingStatus } from '@/types/noteTypes';
-import { color } from '@rneui/base';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Svg, Path, Defs, LinearGradient, Stop, Circle, G, Line } from 'react-native-svg';
 
 interface SvgProps {
-  width: number;
-  height: number;
+  width: number | string;
+  height: number | string;
+  coordinates?: CoordinatesTuple;
 }
+interface NoteLineProps extends SvgProps {
+  status: PlayingStatus;
+  lineDirection: PositionEnd;
+}
+
 interface OneNoteProps extends SvgProps {
   status?: PlayingStatus;
 }
@@ -19,7 +27,7 @@ interface CombinedSvgProps extends SvgProps {
   buttonWidth: number;
   buttonHeight: number;
 }
-interface CombinedSvgCircleSidefluteSidebuttonsThreenotesProps extends CombinedSvgProps {
+interface CombinedSvgCircleSideFluteSideButtonsThreeNotesProps extends CombinedSvgProps {
   buttonTop: number;
   buttonLeft: number;
   noteHeight: number;
@@ -28,7 +36,7 @@ interface CombinedSvgCircleSidefluteSidebuttonsThreenotesProps extends CombinedS
   noteTop: number;
   circleLeft: number;
   circleTop: number;
-  circlWidth: number;
+  circleWidth: number;
   circleHeight: number;
 }
 
@@ -555,7 +563,7 @@ const CombinedButtonAndFluteVector: React.FC<CombinedSvgProps> = ({
 };
 
 const CombinedButtonAndFluteVectorSide: React.FC<
-  CombinedSvgCircleSidefluteSidebuttonsThreenotesProps
+  CombinedSvgCircleSideFluteSideButtonsThreeNotesProps
 > = ({
   width,
   height,
@@ -571,7 +579,7 @@ const CombinedButtonAndFluteVectorSide: React.FC<
   noteTop,
   circleLeft,
   circleTop,
-  circlWidth,
+  circleWidth,
   circleHeight,
 }) => {
   return (
@@ -580,7 +588,7 @@ const CombinedButtonAndFluteVectorSide: React.FC<
         <SideFlute width={width} height={height} />
       </View>
       <View style={{ position: 'absolute', top: circleTop, left: circleLeft }}>
-        <EmptyGradientCircle width={circlWidth} height={circleHeight} />
+        <EmptyGradientCircle width={circleWidth} height={circleHeight} />
       </View>
       <View style={{ position: 'absolute', top: buttonTop, left: buttonLeft }}>
         <SideButtons width={buttonWidth} height={buttonHeight} />
@@ -591,7 +599,7 @@ const CombinedButtonAndFluteVectorSide: React.FC<
     </View>
   );
 };
-const Notestructure: React.FC<SvgProps> = ({ width, height }) => {
+const NoteStructure: React.FC<SvgProps> = ({ width, height }) => {
   return (
     <Svg width={width} height={height} viewBox="0 0 329 251" fill="none">
       <G id="317345c2">
@@ -738,7 +746,7 @@ const MusicNotes: React.FC<SvgProps> = ({ width, height }) => {
   );
 };
 
-const MusicnotesOnStructure: React.FC<Omit<CombinedSvgProps, 'top' | 'left'>> = ({
+const MusicNotesOnStructure: React.FC<Omit<CombinedSvgProps, 'top' | 'left'>> = ({
   width,
   height,
   buttonWidth,
@@ -747,11 +755,66 @@ const MusicnotesOnStructure: React.FC<Omit<CombinedSvgProps, 'top' | 'left'>> = 
   return (
     <View style={styles.container}>
       <View style={styles.noteStructure}>
-        <Notestructure width={width} height={height} />
+        <NoteStructure width={width} height={height} />
       </View>
       <View style={styles.musicNotes}>
         <MusicNotes width={buttonWidth} height={buttonHeight} />
       </View>
+    </View>
+  );
+};
+const NoteLine: React.FC<NoteLineProps> = ({ status, lineDirection, coordinates }) => {
+  const LINE_HEIGHT = 225;
+  const isLineDown = lineDirection === 'down';
+  const lineColor = status ? setStatusColor(status) : secondaryColorNeonBlue;
+
+  const yCoordinate = coordinates && coordinates.y ? coordinates.y : 0;
+  const xCoordinate = coordinates && coordinates.x ? coordinates.x : 0;
+
+  return (
+    <View style={[styles.lineContainer, { top: yCoordinate, left: xCoordinate }]}>
+      <Svg
+        width={STROKE_WIDTH}
+        height={LINE_HEIGHT}
+        viewBox={`0 0 ${STROKE_WIDTH} ${isLineDown}`}
+        fill="none"
+        style={{ transform: [{ rotateX: isLineDown ? '180deg' : '0deg' }] }}
+      >
+        <Path
+          d={
+            isLineDown
+              ? 'M0.5 223C0.5 224.105 1.39543 225 2.5 225C3.60457 225 4.5 224.105 4.5 223H0.5ZM0.5 0.987793L0.5 223H4.5L4.5 0.987793L0.5 0.987793Z'
+              : 'M4 2C4 0.895432 3.10457 0 2 0C0.89543 0 0 0.895432 0 2H4ZM4 224.012L4 2H0L0 224.012H4Z'
+          }
+          fill={lineColor}
+        />
+      </Svg>
+    </View>
+  );
+};
+const NoteStructureSvgLine = () => {
+  return (
+    <View style={{ marginBottom: 10 }}>
+      <Svg width="323" height="2" viewBox="0 0 323 2" fill="none">
+        <Path d="M0 1H323" stroke="#485CEA" strokeWidth="2" />
+      </Svg>
+    </View>
+  );
+};
+
+const ModalTriangle: React.FC<SvgProps> = ({ width, height, coordinates }) => {
+  const yCoordinate = coordinates && coordinates.y ? coordinates.y : 0;
+  const xCoordinate = coordinates && coordinates.x ? coordinates.x : 0;
+  return (
+    <View style={[styles.lineContainer, { top: yCoordinate, left: xCoordinate }]}>
+      <Svg width={width} height={height} viewBox="0 0 47 40" fill="none">
+        <Path
+          d="M2.28238 38.75L23.5 2L44.7176 38.75H2.28238Z"
+          fill="white"
+          stroke="#485CEA"
+          strokeWidth={2}
+        />
+      </Svg>
     </View>
   );
 };
@@ -762,6 +825,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  lineContainer: {
+    position: 'absolute',
+  },
   noteStructure: {
     position: 'absolute',
   },
@@ -771,6 +837,7 @@ const styles = StyleSheet.create({
 });
 
 export {
+  NoteStructureSvgLine,
   FluteVector,
   ButtonIcons,
   CombinedButtonAndFluteVector,
@@ -780,7 +847,9 @@ export {
   EmptyGradientCircle,
   ThreeNotes,
   CombinedButtonAndFluteVectorSide,
-  Notestructure,
+  NoteStructure,
   MusicNotes,
-  MusicnotesOnStructure,
+  MusicNotesOnStructure,
+  NoteLine,
+  ModalTriangle,
 };

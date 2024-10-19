@@ -1,10 +1,10 @@
-import { Note, NoteName } from './noteTypes';
+import { AllNotes } from '@/constants/texts/Notes';
 
 type Question = {
   questionName: string;
-  type: 'mulipleChoice' | 'typeIn' | 'testing';
+  type: 'multipleChoice' | 'typeIn' | 'testing';
   choices?: string[];
-  noteTest?: NoteName;
+  noteTest?: AllNotes;
 };
 
 export type { Question };

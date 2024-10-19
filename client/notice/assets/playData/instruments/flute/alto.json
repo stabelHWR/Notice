@@ -1,0 +1,54 @@
+{
+  "name": "Altblockflöte",
+  "clef": "treble",
+  "pitchRange": "F4 - G6",
+  "size": "medium",
+  "notes": [
+    {
+      "noteName": "F",
+      "status": "notPlayed",
+      "linePosition": "middle"
+    },
+    {
+      "noteName": "G",
+      "status": "played",
+      "linePosition": "down"
+    },
+    {
+      "noteName": "A",
+      "status": "notPlayed",
+      "linePosition": "down"
+    },
+    {
+      "noteName": "B",
+      "status": "notPlayed",
+      "linePosition": "down"
+    },
+    {
+      "noteName": "C",
+      "status": "notPlayed",
+      "linePosition": "middle"
+    },
+    {
+      "noteName": "D",
+      "status": "notPlayed",
+      "linePosition": "down"
+    },
+    {
+      "noteName": "E",
+      "status": "notPlayed",
+      "linePosition": "down"
+    },
+    {
+      "noteName": "F",
+      "status": "notPlayed",
+      "linePosition": "upper"
+    },
+    {
+      "noteName": "G",
+      "status": "notPlayed",
+      "linePosition": "up"
+    }
+  ],
+  "description": "The alto recorder is slightly larger than the soprano, with a lower and richer tone, commonly used in baroque music."
+}

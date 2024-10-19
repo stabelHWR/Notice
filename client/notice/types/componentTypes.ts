@@ -6,5 +6,13 @@ type SizeTuple = {
   width: number;
   height: number;
 };
+type PositionEnd = 'down' | 'up';
+type Position = PositionEnd | 'middle' | 'upper';
+type CustomSize = 'small' | 'medium' | 'large';
 
-export type { CoordinatesTuple, SizeTuple };
+export enum Languages {
+  En = 'en',
+  DE = 'de',
+}
+
+export type { CoordinatesTuple, SizeTuple, PositionEnd, Position, CustomSize };

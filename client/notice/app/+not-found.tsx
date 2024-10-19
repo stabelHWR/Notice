@@ -1,32 +1,26 @@
-import { Link, Stack } from 'expo-router';
-import { StyleSheet } from 'react-native';
-
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import { router } from 'expo-router';
+import React from 'react';
+import { RectangleGradientButton } from '@/components/CustomButtons';
+import { Logo } from '@/components/Images';
+import i18n from '@/constants/texts/Translations';
+import { containerStyles } from '@/components/styles';
+import { OneNote } from '@/components/Svgs';
+import { BoldText } from '@/components/TextElements';
+import { HStack } from '@/components/ui/hstack';
+import { VStack } from '@/components/ui/vstack';
 
 export default function NotFoundScreen() {
   return (
-    <>
-      <Stack.Screen options={{ title: 'Oops!' }} />
-      <ThemedView style={styles.container}>
-        <ThemedText type="title">This screen doesn `&apos;`t exist.</ThemedText>
-        <Link href="/" style={styles.link}>
-          <ThemedText type="link">Go to home screen!</ThemedText>
-        </Link>
-      </ThemedView>
-    </>
+    <VStack style={containerStyles.mainCentralContainer}>
+      <HStack space="md" style={containerStyles.horizontalCentralContainer}>
+        <BoldText displayedText={i18n.t('thisPageDoesNotExist')} />
+        <OneNote width={50} height={50} />
+      </HStack>
+      <Logo size="large" />
+      <RectangleGradientButton
+        displayedText={i18n.t('goBack')}
+        onPress={() => router.push('./home')}
+      />
+    </VStack>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-  },
-  link: {
-    marginTop: 15,
-    paddingVertical: 15,
-  },
-});

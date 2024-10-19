@@ -8,8 +8,7 @@ import { containerStyles } from '@/components/styles';
 import { Icon } from '@/components/ui/icon';
 import { secondaryColorNeonBlue } from '@/constants/Colors';
 import { Settings as SettingsIcon, Volume1, Pencil, LucideIcon } from 'lucide-react-native';
-import { CloseButton } from '@/components/GradientButton';
-import { useRouter } from 'expo-router';
+import PageView from '@/components/PageView';
 
 interface SettingProps {
   displayedText: string;
@@ -32,21 +31,17 @@ const Setting: React.FC<SettingProps> = ({ icon, displayedText }) => {
 };
 
 export default function Settings() {
-  const router = useRouter();
   return (
-    <VStack style={containerStyles.mainContainerForPages}>
-      <CloseButton onPress={() => router.push('./home')} />
-      <VStack style={containerStyles.mainCentralContainer}>
-        <HStack space="md" style={containerStyles.horizontalCentralContainer}>
-          <GradientHeading type="heading" displayedText={i18n.t('settings')} />
-          <Icon as={SettingsIcon} color={secondaryColorNeonBlue} width={40} height={40} />
-        </HStack>
-        <VStack style={containerStyles.buttonCointainer}>
-          <Setting displayedText={'name'} icon={Pencil} />
-          <Setting displayedText={'volume'} icon={Volume1} />
-        </VStack>
-        <ThreeNotes width={100} height={100} />
+    <PageView>
+      <HStack space="md" style={containerStyles.horizontalCentralContainer}>
+        <GradientHeading type="heading" displayedText={i18n.t('settings')} />
+        <Icon as={SettingsIcon} color={secondaryColorNeonBlue} width={40} height={40} />
+      </HStack>
+      <VStack style={containerStyles.buttonContainer}>
+        <Setting displayedText={'name'} icon={Pencil} />
+        <Setting displayedText={'volume'} icon={Volume1} />
       </VStack>
-    </VStack>
+      <ThreeNotes width={100} height={100} />
+    </PageView>
   );
 }

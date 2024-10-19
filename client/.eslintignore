@@ -1,2 +1,16 @@
+# Ignore node_modules folder
 node_modules/
 
+# Ignore build directory
+build/
+
+# Ignore specific directories or files
+components/ui/
+
+
+# Ignore all files in the scripts/ folder
+scripts/**
+
+# Ignore specific config files
+babel.config.js
+tailwind.config.js

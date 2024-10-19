@@ -4,39 +4,17 @@ import { HStack } from '@/components/ui/hstack';
 import { VStack } from '@/components/ui/vstack';
 import i18n from '@/constants/texts/Translations';
 import { containerStyles } from '@/components/styles';
-import { FlatList, StyleSheet } from 'react-native';
-import { CloseButton, InfoButton } from '@/components/GradientButton';
-import { useRouter } from 'expo-router';
-import { FluteTutorial, Logo } from '@/components/Images';
-import CustomModal from '@/components/Modal';
+import { FlatList } from 'react-native';
+import { TutorialImage, Logo } from '@/components/Images';
+import { CustomPopUpModal } from '@/components/Modals';
+import { dataArray, fingersEN, fingersDE, sides } from '@/constants/texts/Fingers';
+import { InfoButton } from '@/components/CustomButtons';
+import PageView from '@/components/PageView';
 
-type dataArray = {
-  boldDisplayedText: string;
-  infoDisplayedText: string;
-};
 interface InfoListElementProps {
   heading: string;
   data: Array<dataArray>;
 }
-const sides: Array<dataArray> = [
-  { boldDisplayedText: 'L', infoDisplayedText: 'left' },
-  { boldDisplayedText: 'R', infoDisplayedText: 'right' },
-];
-
-const fingersEN: Array<dataArray> = [
-  { boldDisplayedText: 'I', infoDisplayedText: 'indexFinger' },
-  { boldDisplayedText: 'R', infoDisplayedText: 'ringFinger' },
-  { boldDisplayedText: 'M', infoDisplayedText: 'middleFinger' },
-  { boldDisplayedText: 'L', infoDisplayedText: 'littleFinger' },
-  { boldDisplayedText: 'T', infoDisplayedText: 'thumb' },
-];
-const fingersDE: Array<dataArray> = [
-  { boldDisplayedText: 'Z', infoDisplayedText: 'indexFinger' },
-  { boldDisplayedText: 'R', infoDisplayedText: 'ringFinger' },
-  { boldDisplayedText: 'M', infoDisplayedText: 'middleFinger' },
-  { boldDisplayedText: 'K', infoDisplayedText: 'littleFinger' },
-  { boldDisplayedText: 'D', infoDisplayedText: 'thumb' },
-];
 
 const InfoListTextElement: React.FC<InfoListElementProps> = ({ data, heading }) => {
   return (
@@ -58,38 +36,25 @@ const InfoListTextElement: React.FC<InfoListElementProps> = ({ data, heading }) 
 };
 
 export default function Tutorials() {
-  const router = useRouter();
   const [modalVisibility, setModalVisibility] = useState(false);
   const fingerArray = i18n.locale === 'en' ? fingersEN : fingersDE;
 
   return (
-    <VStack style={containerStyles.mainContainerForPages}>
-      <CloseButton onPress={() => router.push('./home')} />
-      <VStack style={containerStyles.mainCentralContainer}>
-        <HStack space="md" style={containerStyles.horizontalCentralContainer}>
-          <GradientHeading type="heading" displayedText={i18n.t('tutorials')} />
-          <Logo size={'small'} />
-        </HStack>
-        <HStack style={styles.tutorialInfoContainer}>
-          <InfoButton onPress={() => setModalVisibility(true)} />
-          <CustomModal modalVisibility={modalVisibility} setModalVisibility={setModalVisibility}>
-            <VStack>
-              <InfoListTextElement data={sides} heading="side" />
-              <InfoListTextElement data={fingerArray} heading="finger" />
-            </VStack>
-          </CustomModal>
-          <FluteTutorial />
-        </HStack>
-      </VStack>
-    </VStack>
+    <PageView>
+      <HStack space="md" style={containerStyles.horizontalCentralContainer}>
+        <GradientHeading type="heading" displayedText={i18n.t('tutorials')} />
+        <Logo size={'small'} />
+      </HStack>
+      <HStack style={containerStyles.tutorialInfoContainer}>
+        <InfoButton onPress={() => setModalVisibility(true)} />
+        <CustomPopUpModal modalVisibility={modalVisibility} setModalVisibility={setModalVisibility}>
+          <VStack>
+            <InfoListTextElement data={sides} heading="side" />
+            <InfoListTextElement data={fingerArray} heading="finger" />
+          </VStack>
+        </CustomPopUpModal>
+        <TutorialImage />
+      </HStack>
+    </PageView>
   );
 }
-const styles = StyleSheet.create({
-  tutorialInfoContainer: {
-    justifyContent: 'space-around',
-    position: 'relative',
-    alignItems: 'flex-start',
-    marginStart: '50%',
-    width: '100%',
-  },
-});

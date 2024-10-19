@@ -1,25 +1,38 @@
-import { STANDARD_NOTES, SHARP_NOTES, FLAT_NOTES } from '@/constants/Notes';
+import { AllNotes } from '@/constants/texts/Notes';
+import { Position } from './componentTypes';
 
 type PlayingStatus = 'notPlayed' | 'failed' | 'success';
 type RecordingStatus = PlayingStatus | 'notRecordedInSession';
 
-type StandardNote = (typeof STANDARD_NOTES)[number];
-type SharpNote = (typeof SHARP_NOTES)[number];
-type FlatNote = (typeof FLAT_NOTES)[number];
-type NoteName = StandardNote | SharpNote | FlatNote;
+export enum Clef {
+  Treble = 'treble',
+  Bass = 'bass',
+  Alto = 'alto',
+  Soprano = 'soprano',
+}
+
+export enum InstrumentName {
+  Flute = 'flute',
+  // Add other instruments as needed. For now, since we will only do the flute, I will only consider the flute cases
+}
+
+interface NotesData {
+  name: string;
+  clef: Clef;
+  pitchRange: string;
+  size: string;
+  notes: NotePlay[];
+  description: string;
+}
 
 type Note = {
-  noteName: StandardNote;
+  noteName: AllNotes;
   status: PlayingStatus;
+  linePosition: Position;
 };
+
 type NotePlay = Note & {
   status: PlayingStatus;
 };
 
-type Harmony = {
-  harmonyName: string;
-  clef: 'treble' | 'bass' | 'alto' | 'tenor';
-  notes: Note[];
-};
-
-export type { PlayingStatus, RecordingStatus, NoteName, Note, NotePlay, Harmony };
+export type { PlayingStatus, RecordingStatus, Note, NotePlay, NotesData };

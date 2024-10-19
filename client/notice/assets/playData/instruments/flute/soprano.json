@@ -1,0 +1,50 @@
+{
+  "name": "Sopranblockflöte",
+  "clef": "soprano",
+  "pitchRange": "C5 - D7",
+  "size": "small",
+  "notes": [
+    {
+      "noteName": "C",
+      "status": "notPlayed",
+      "linePosition": "down",
+      "line": "middle"
+    },
+    {
+      "noteName": "D",
+      "status": "notPlayed",
+      "linePosition": "down"
+    },
+    {
+      "noteName": "E",
+      "status": "played",
+      "linePosition": "down"
+    },
+    {
+      "noteName": "F",
+      "status": "notPlayed",
+      "linePosition": "down"
+    },
+    {
+      "noteName": "G",
+      "status": "played",
+      "linePosition": "down"
+    },
+    {
+      "noteName": "A",
+      "status": "notPlayed",
+      "linePosition": "up"
+    },
+    {
+      "noteName": "B",
+      "status": "notPlayed",
+      "linePosition": "up"
+    },
+    {
+      "noteName": "D",
+      "status": "notPlayed",
+      "linePosition": "up"
+    }
+  ],
+  "description": "A soprano recorder, commonly used by beginners, has a bright, high pitch and is the most popular recorder."
+}

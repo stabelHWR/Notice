@@ -4,10 +4,12 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import 'react-native-reanimated';
 import { Inter_900Black, Inter_500Medium, useFonts } from '@expo-google-fonts/inter';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { useColorScheme } from 'react-native';
 
 SplashScreen.preventAutoHideAsync();
+
 //TODO remove upper index bar
+// TODO should we do vibrations, sounds and where would it make sense to do animations?
 export default function RootLayout() {
   const colorScheme = useColorScheme();
 
@@ -31,7 +33,7 @@ export default function RootLayout() {
       <Stack>
         <Stack.Screen name="(welcome)" options={{ headerShown: false }} />
         <Stack.Screen name="home" options={{ headerShown: false }} />
-        <Stack.Screen name="practice" options={{ headerShown: false }} />
+        <Stack.Screen name="(progress)" options={{ headerShown: false }} />
         <Stack.Screen name="tutorials" options={{ headerShown: false }} />
         <Stack.Screen name="settings" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" options={{ headerShown: false }} />

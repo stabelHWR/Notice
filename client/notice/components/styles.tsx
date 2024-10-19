@@ -28,7 +28,6 @@ const containerStyles = StyleSheet.create({
     flex: 1,
   },
   mainContainerForPages: {
-    justifyContent: 'space-evenly',
     flex: 1,
   },
   mainFlexStartContainer: {
@@ -38,11 +37,17 @@ const containerStyles = StyleSheet.create({
   horizontalCentralContainer: {
     flexDirection: 'row',
   },
-  buttonCointainer: {
+  buttonContainer: {
     justifyContent: 'space-evenly',
     width: '100%',
     alignItems: 'center',
     height: '50%',
+  },
+  tutorialInfoContainer: {
+    position: 'relative',
+    alignItems: 'flex-start',
+    marginStart: '50%',
+    width: '100%',
   },
 });
 export { shadowStyles, popupContent, containerStyles };

@@ -1,0 +1,54 @@
+{
+  "name": "Bassblockflöte",
+  "clef": "bass",
+  "pitchRange": "F3 - G5",
+  "size": "very large",
+  "notes": [
+    {
+      "noteName": "F",
+      "status": "played",
+      "linePosition": "middle"
+    },
+    {
+      "noteName": "G",
+      "status": "notPlayed",
+      "linePosition": "up"
+    },
+    {
+      "noteName": "A",
+      "status": "failed",
+      "linePosition": "up"
+    },
+    {
+      "noteName": "B",
+      "status": "notPlayed",
+      "linePosition": "up"
+    },
+    {
+      "noteName": "C",
+      "status": "notPlayed",
+      "linePosition": "down"
+    },
+    {
+      "noteName": "D",
+      "status": "notPlayed",
+      "linePosition": "down"
+    },
+    {
+      "noteName": "E",
+      "status": "notPlayed",
+      "linePosition": "down"
+    },
+    {
+      "noteName": "F",
+      "status": "notPlayed",
+      "linePosition": "upper"
+    },
+    {
+      "noteName": "G",
+      "status": "notPlayed",
+      "linePosition": "up"
+    }
+  ],
+  "description": "The bass recorder produces deep, rich tones and is often used to support lower harmonies in ensembles."
+}

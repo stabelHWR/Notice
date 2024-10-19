@@ -1,6 +1,6 @@
 import { startGradientCoordinates, endGradientCoordinates } from '@/constants/Coordinates';
 import React from 'react';
-import { Text } from 'react-native';
+import { StyleProp, Text, ViewStyle } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { GradientColors } from '@/constants/Colors';
 import MaskedView from '@react-native-masked-view/masked-view';
@@ -15,7 +15,7 @@ const SecondaryGradientColors = [GradientColors.neonBlue, GradientColors.vividSk
 interface GradientHeadingProps {
   children: React.ReactNode;
   gradientColors: string[];
-  style: object;
+  style?: StyleProp<ViewStyle>;
 }
 
 interface GradientTextProps {
@@ -27,7 +27,7 @@ interface GradientTextProps {
 
 interface DefinedGradientProps {
   children: React.ReactNode;
-  style: object;
+  style?: StyleProp<ViewStyle>;
 }
 
 const Gradient: React.FC<GradientHeadingProps> = ({ children, gradientColors, style }) => {

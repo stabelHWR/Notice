@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleProp, StyleSheet, ViewStyle } from 'react-native';
 import { FontColors, secondaryColorNeonBlue, StatusColors } from '@/constants/Colors';
-import { LucideIcon, BoxSelect, CircleX, CircleCheck } from 'lucide-react-native';
+import { LucideIcon, CircleX, CircleCheck } from 'lucide-react-native';
 import { MainGradient } from './Gradients';
 import { shadowStyles } from './styles';
 import { Icon } from '@/components/ui/icon';
@@ -18,9 +18,9 @@ interface StatusIconProps extends Omit<IconProps, 'icon'> {
   status: PlayingStatus | RecordingStatus;
 }
 
-const NormalIcon: React.FC<IconProps> = ({ icon, color }) => {
+const NormalIcon: React.FC<IconProps> = ({ icon, color, style }) => {
   const iconOutlineColor = !color ? secondaryColorNeonBlue : color;
-  return <Icon as={icon} color={iconOutlineColor} width={40} height={40} />;
+  return <Icon as={icon} color={iconOutlineColor} width={40} height={40} style={style} />;
 };
 
 const GradientIcon: React.FC<IconProps> = ({ icon, style }) => {
@@ -37,30 +37,11 @@ const GradientIcon: React.FC<IconProps> = ({ icon, style }) => {
   );
 };
 
-const PlayedStatusIcon: React.FC<StatusIconProps> = ({ status }) => {
-  const currentStatusIcon =
-    status === 'notPlayed'
-      ? BoxSelect
-      : status === 'failed'
-        ? CircleX
-        : status === 'success'
-          ? CircleCheck
-          : status === 'notRecordedInSession'
-            ? BoxSelect
-            : BoxSelect;
-
+const PlayedStatusIcon: React.FC<StatusIconProps> = ({ status, style }) => {
+  const currentStatusIcon = status === 'failed' ? CircleX : CircleCheck;
   const iconColor =
-    status === 'notPlayed'
-      ? StatusColors.notPlayed.background
-      : status === 'failed'
-        ? StatusColors.error.background
-        : status === 'success'
-          ? StatusColors.success.background
-          : status === 'notRecordedInSession'
-            ? secondaryColorNeonBlue
-            : secondaryColorNeonBlue;
-
-  return <NormalIcon icon={currentStatusIcon} color={iconColor} style={{ marginTop: 10 }} />;
+    status === 'notPlayed' ? StatusColors.notPlayed.background : StatusColors.error.background;
+  return <NormalIcon icon={currentStatusIcon} color={iconColor} style={style} />;
 };
 
 const styles = StyleSheet.create({

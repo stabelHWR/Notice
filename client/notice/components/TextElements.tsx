@@ -2,9 +2,11 @@ import React from 'react';
 import { Heading } from '@/components/ui/heading';
 import { Center } from '@/components/ui/center';
 import { GradientText } from './Gradients';
-import { secondaryColorNeonBlue, StatusColors } from '@/constants/Colors';
+import { secondaryColorNeonBlue } from '@/constants/Colors';
 import i18n from '@/constants/texts/Translations';
 import { PlayingStatus } from '@/types/noteTypes';
+import { setStatusColor } from '@/app/util/statusSetters';
+import { StyleProp, ViewStyle } from 'react-native';
 interface TextProps {
   displayedText: string;
   status?: PlayingStatus;
@@ -12,6 +14,7 @@ interface TextProps {
 
 interface GradientHeadingProps extends TextProps {
   type: 'heading' | 'subheading';
+  style?: StyleProp<ViewStyle>;
 }
 
 interface StatusHeadingProps {
@@ -20,20 +23,8 @@ interface StatusHeadingProps {
   displayedText?: string;
 }
 
-const setStatuscolor = (status: PlayingStatus) => {
-  const textColor =
-    status === 'notPlayed'
-      ? StatusColors.notPlayed.background
-      : status === 'failed'
-        ? StatusColors.error.background
-        : status === 'success'
-          ? StatusColors.success.background
-          : secondaryColorNeonBlue;
-  return textColor;
-};
-
 const InfoText: React.FC<TextProps> = ({ displayedText, status }) => {
-  const textColor = status ? setStatuscolor(status) : secondaryColorNeonBlue;
+  const textColor = status ? setStatusColor(status) : secondaryColorNeonBlue;
   return (
     <Center>
       <Heading size="xl" style={{ color: textColor }}>
@@ -44,42 +35,41 @@ const InfoText: React.FC<TextProps> = ({ displayedText, status }) => {
 };
 
 const BoldText: React.FC<TextProps> = ({ displayedText, status }) => {
-  const textColor = status ? setStatuscolor(status) : secondaryColorNeonBlue;
+  const textColor = status ? setStatusColor(status) : secondaryColorNeonBlue;
   return (
     <Center>
-      <Heading size="xl" style={{ color: textColor }} bold={true}>
+      <Heading size="xl" style={{ color: textColor, fontWeight: 'bold' }}>
         {displayedText}
       </Heading>
     </Center>
   );
 };
 
-const GradientHeading: React.FC<GradientHeadingProps> = ({ type, displayedText }) => {
-  const size = type === 'heading' ? '5xl' : '3xl';
+const GradientHeading: React.FC<GradientHeadingProps> = ({ type, displayedText, style }) => {
+  const size = type === 'heading' ? 36 : 25;
   return (
-    <Center>
+    <Center style={style}>
       <GradientText>
-        <Heading size={size}>{displayedText}</Heading>
+        <Heading style={{ fontSize: size }}>{displayedText}</Heading>
       </GradientText>
     </Center>
   );
 };
 
 const StatusHeading: React.FC<StatusHeadingProps> = ({ status, type, displayedText }) => {
-  const statusText =
-    status === 'failed' && !displayedText
+  const statusText = displayedText
+    ? displayedText
+    : status === 'failed'
       ? `${i18n.t('wrong')}!`
-      : status === 'success' && !displayedText
+      : status === 'success'
         ? `${i18n.t('great')}!`
-        : displayedText;
-  const size = type === 'heading' ? '5xl' : '3xl';
-  const textColor = status ? setStatuscolor(status) : secondaryColorNeonBlue;
+        : '';
+  const size = type === 'heading' ? 36 : 25;
+  const textColor = status ? setStatusColor(status) : secondaryColorNeonBlue;
 
   return (
     <Center>
-      <Heading size={size} style={{ color: textColor }}>
-        {statusText}
-      </Heading>
+      <Heading style={{ color: textColor, fontSize: size }}>{statusText}</Heading>
     </Center>
   );
 };

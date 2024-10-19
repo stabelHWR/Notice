@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { RectangleGradientButton } from '@/components/GradientButton';
 import { Logo } from '@/components/Images';
 import { CustomDropdown, CustomInput } from '@/components/Inputs';
 import { containerStyles } from '@/components/styles';
@@ -8,9 +7,10 @@ import { GradientHeading } from '@/components/TextElements';
 import { HStack } from '@/components/ui/hstack';
 import { VStack } from '@/components/ui/vstack';
 import { questions } from '@/constants/texts/Questions';
-import { APP_NAME } from '@/constants/texts/Strings';
 import i18n from '@/constants/texts/Translations';
-import { PracticePage } from '../practice';
+import { RectangleGradientButton } from '@/components/CustomButtons';
+import { APP_NAME } from '@/constants/texts/AppStrings';
+import { PracticePage } from '../(progress)/practice';
 
 export default function BeginnerQuiz() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -28,7 +28,7 @@ export default function BeginnerQuiz() {
       </HStack>
       <Logo size="medium" />
       <VStack style={containerStyles.mainFlexStartContainer}>
-        {currentQuestion.type === 'mulipleChoice' ? (
+        {currentQuestion.type === 'multipleChoice' ? (
           <CustomDropdown
             selectedItems={
               currentQuestion.choices

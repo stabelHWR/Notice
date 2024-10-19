@@ -1,9 +1,10 @@
 import { Question } from '@/types/quizTypes';
+import { AllNotes } from './Notes';
 
 const questions: Array<Question> = [
   {
     questionName: 'question1',
-    type: 'mulipleChoice',
+    type: 'multipleChoice',
     choices: ['choices1', 'choices2', 'choices3'],
   },
   {
@@ -13,7 +14,7 @@ const questions: Array<Question> = [
   {
     questionName: 'question3',
     type: 'testing',
-    noteTest: 'd',
+    noteTest: AllNotes.d,
   },
 ];
 

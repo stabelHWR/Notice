@@ -22,7 +22,6 @@
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
     "react/jsx-uses-react": "off",
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }], //should add ".ts" if typescript project
     "import/order": [
       "error",
       {
@@ -36,8 +35,5 @@
     "react": {
       "version": "detect"
     }
-  },
-  "globals": {
-    "AudioWorkletGlobalScope": "readonly"
   }
 }

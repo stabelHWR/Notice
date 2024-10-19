@@ -1,6 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { RectangleGradientButton } from '@/components/GradientButton';
 import { GradientHeading } from '@/components/TextElements';
 import { VStack } from '@/components/ui/vstack';
 import { HStack } from '@/components/ui/hstack';
@@ -9,6 +7,7 @@ import { OneNote } from '@/components/Svgs';
 import { Logo } from '@/components/Images';
 import i18n from '@/constants/texts/Translations';
 import { useRouter } from 'expo-router';
+import { RectangleGradientButton } from '@/components/CustomButtons';
 
 interface WelcomeOrRegisterPageProps {
   isWelcomePage: boolean;
@@ -29,10 +28,6 @@ const WelcomeOrRegisterPage: React.FC<WelcomeOrRegisterPageProps> = ({ isWelcome
       <RectangleGradientButton displayedText={text} onPress={() => router.push(link)} />
     </VStack>
   );
-};
-
-WelcomeOrRegisterPage.propTypes = {
-  isWelcomePage: PropTypes.bool.isRequired,
 };
 
 export default WelcomeOrRegisterPage;

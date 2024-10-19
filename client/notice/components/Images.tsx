@@ -1,52 +1,44 @@
 import React from 'react';
-import { ImageSourcePropType } from 'react-native';
 import { Image } from '@/components/ui/image';
 import i18n from '@/constants/texts/Translations';
-
-const imagePath = '@/assets/images';
+import { Clef } from '@/types/noteTypes';
+import { CustomSize } from '@/types/componentTypes';
+import getImage from '@/assets/images';
+import { getCurrentInstrument } from '@/app/util/notesUtils';
+import { AllNotes } from '@/constants/texts/Notes';
 
 interface ImageProps {
-  size: 'small' | 'medium' | 'large';
+  size: CustomSize;
 }
-interface NotePlayOnFluteImageProps {
-  noteName: string;
+interface NotePlayImageProps extends ImageProps {
+  noteName: AllNotes;
+  clef: Clef;
 }
-const imagePathMap: { [key: string]: ImageSourcePropType } = {
-  c: require('@/assets/images/notes/cNote.png'),
-  d: require('@/assets/images/notes/dNote.png'),
-  // Add other notes here
-  // e: require('@/assets/notes/eNote.png'),
-  // f: require('@/assets/notes/fNote.png'),
-  // You can continue adding other note images...
-};
 
+const currentInstrument = getCurrentInstrument();
 const Logo: React.FC<ImageProps> = ({ size }) => {
   const pickedSize = size === 'large' ? 'lg' : size === 'medium' ? 'md' : 'xs';
-  const pickedImage =
-    size === 'large' || size === 'medium'
-      ? require(`${imagePath}/icons/icon.png`)
-      : require(`${imagePath}/icons/favicon.png`);
+  const pickedImage = getImage('icons', size);
   return <Image source={pickedImage} alt="Logo" size={pickedSize} />;
 };
 
-const Note: React.FC<ImageProps> = ({ size }) => {
+const NoteImage: React.FC<ImageProps> = ({ size }) => {
   const pickedSize = size === 'large' ? 'lg' : size === 'medium' ? 'md' : 'xs';
-  return <Image source={require(`${imagePath}/notes.png`)} size={pickedSize} alt="Logo" />;
+  const noteImage = getImage('inApp', 'notes');
+
+  return <Image source={noteImage} size={pickedSize} alt="Logo" />;
 };
-const FluteTutorial = () => {
-  const fluteTutorialImage =
-    i18n.locale === 'en'
-      ? require(`${imagePath}/FluteTutorial/FluteTutorialEN.png`)
-      : require(`${imagePath}/FluteTutorial/FluteTutorialDE.png`);
+
+const TutorialImage = () => {
+  const fluteTutorialImage = getImage(currentInstrument, i18n.locale);
 
   return <Image source={fluteTutorialImage} size="2xl" alt="FluteTutorial" />;
 };
-const NotePlayOnFluteImage: React.FC<NotePlayOnFluteImageProps> = ({ noteName }) => {
-  const lowerCaseNoteName = noteName.toLowerCase();
 
-  const pathToPlayPicture = imagePathMap[lowerCaseNoteName];
+const NotePlayImage: React.FC<NotePlayImageProps> = ({ clef, noteName, size }) => {
+  const pathToPlayPicture = getImage(currentInstrument, noteName, clef, size);
 
-  return <Image source={pathToPlayPicture} size="2xl" alt={`${noteName} Note`} />;
+  return <Image source={pathToPlayPicture} alt={`${noteName} Note`} />;
 };
 
-export { Logo, Note, FluteTutorial, NotePlayOnFluteImage };
+export { Logo, NoteImage, TutorialImage, NotePlayImage };

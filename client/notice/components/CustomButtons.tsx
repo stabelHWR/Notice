@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { Pressable, StyleProp, StyleSheet, Text, ViewStyle } from 'react-native';
 import React from 'react';
 import { Button, ButtonText } from '@/components/ui/button';
 import { GestureResponderEvent } from 'react-native/Libraries/Types/CoreEventTypes';
@@ -15,6 +15,8 @@ import {
   ChevronRight,
   ChevronDown,
   X,
+  Play,
+  ChevronUp,
 } from 'lucide-react-native';
 import { Icon } from '@/components/ui/icon';
 import { GradientIcon, NormalIcon } from './Icons';
@@ -24,19 +26,28 @@ interface GradientButtonProps {
   displayedText: string;
 }
 interface RoundButtonProps extends GradientButtonProps {
-  icon: LucideIcon;
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'xs';
+}
+interface NoteRoundButtonProps extends RoundButtonProps {
+  backgroundColor: string;
+  style?: StyleProp<ViewStyle>;
+}
+interface GradientRoundButtonProps extends RoundButtonProps {
+  icon: LucideIcon;
 }
 
 interface RecordButtonProps extends Omit<GradientButtonProps, 'displayedText'> {
   isRecording: boolean;
 }
 
-interface GradientIconButtonProps extends Omit<RoundButtonProps, 'displayedText'> {
+interface GradientIconButtonProps extends Omit<GradientRoundButtonProps, 'displayedText'> {
   hasFill?: boolean;
-  style?: Record<string, any>;
+  style?: StyleProp<ViewStyle>;
 }
 
+type ScrollUpAndDownButtonProps = Omit<GradientIconButtonProps, 'hasFill' | 'icon'> & {
+  isUp: boolean;
+};
 type ScrollLeftAndRightButtonProps = Omit<GradientIconButtonProps, 'hasFill' | 'icon'> & {
   isLeft: boolean;
 };
@@ -51,18 +62,23 @@ const RectangleGradientButton: React.FC<GradientButtonProps> = ({ onPress, displ
   );
 };
 
-const RoundGradientButton: React.FC<RoundButtonProps> = ({ onPress, icon, displayedText }) => {
+const RoundGradientButton: React.FC<GradientRoundButtonProps> = ({
+  onPress,
+  icon,
+  displayedText,
+}) => {
+  const WIDTH = 75;
+  const HEIGHT = 75;
   return (
-    <Pressable onPress={onPress} style={styles.roundButton}>
-      <SecondaryGradient style={styles.roundButton}>
-        <Text style={styles.largeButtonText}>{displayedText}</Text>
-        <Icon as={icon} color={FontColors.light.background} width={40} height={40} />
+    <Pressable onPress={onPress}>
+      <SecondaryGradient style={[styles.roundButton, { width: WIDTH, height: HEIGHT }]}>
+        <Text style={styles.smallButtonText}>{displayedText}</Text>
+        <Icon as={icon} color={FontColors.light.background} width={30} height={30} />
       </SecondaryGradient>
     </Pressable>
   );
 };
 
-//TODO: Define functions to stop and record
 const RecordGradientButton: React.FC<RecordButtonProps> = ({ onPress, isRecording }) => {
   const usedIcon = isRecording ? Mic : MicOff;
   const text = isRecording ? 'Record' : 'Stop';
@@ -88,6 +104,12 @@ const InfoButton: React.FC<Omit<GradientIconButtonProps, 'icon' | 'style' | 'has
 }) => {
   return <GradientIconButton icon={Info} onPress={onPress} size="xl" hasFill={true} />;
 };
+const PlayButton: React.FC<Omit<GradientIconButtonProps, 'icon' | 'style' | 'hasFill'>> = ({
+  onPress,
+}) => {
+  return <GradientIconButton icon={Play} onPress={onPress} size="xl" hasFill={true} />;
+};
+
 const CloseButton: React.FC<Omit<GradientIconButtonProps, 'icon' | 'hasFill'>> = ({ onPress }) => {
   return (
     <GradientIconButton
@@ -99,11 +121,52 @@ const CloseButton: React.FC<Omit<GradientIconButtonProps, 'icon' | 'hasFill'>> =
     />
   );
 };
-const ScrollButtonDown: React.FC<Omit<GradientIconButtonProps, 'icon' | 'style' | 'hasFill'>> = ({
-  onPress,
-}) => {
-  return <GradientIconButton icon={ChevronDown} onPress={onPress} size="lg" hasFill={true} />;
+const BackButton: React.FC<Omit<GradientIconButtonProps, 'icon' | 'hasFill'>> = ({ onPress }) => {
+  return (
+    <GradientIconButton
+      icon={ChevronLeft}
+      onPress={onPress}
+      size="xl"
+      hasFill={false}
+      style={styles.closeButton}
+    />
+  );
 };
+
+const RoundButton: React.FC<NoteRoundButtonProps> = ({
+  onPress,
+  displayedText,
+  backgroundColor,
+  style,
+}) => {
+  const WIDTH = 48;
+  const HEIGHT = 48;
+
+  return (
+    <Pressable
+      onPress={onPress}
+      style={[
+        { backgroundColor: backgroundColor, width: WIDTH, height: HEIGHT },
+        styles.roundButton,
+        style,
+      ]}
+    >
+      <Text style={styles.largeButtonText}>{displayedText}</Text>
+    </Pressable>
+  );
+};
+
+const ScrollUpOrDownButton: React.FC<Omit<ScrollUpAndDownButtonProps, 'icon' | 'hasFill'>> = ({
+  onPress,
+  isUp,
+  style,
+}) => {
+  const usedIcon = isUp ? ChevronUp : ChevronDown;
+  return (
+    <GradientIconButton icon={usedIcon} onPress={onPress} size="lg" hasFill={false} style={style} />
+  );
+};
+
 const ScrollToTheSideButton: React.FC<ScrollLeftAndRightButtonProps> = ({
   onPress,
   isLeft,
@@ -113,6 +176,19 @@ const ScrollToTheSideButton: React.FC<ScrollLeftAndRightButtonProps> = ({
   return (
     <GradientIconButton icon={usedIcon} onPress={onPress} size="lg" hasFill={false} style={style} />
   );
+};
+
+export {
+  RectangleGradientButton,
+  RecordGradientButton,
+  GradientIconButton,
+  ScrollUpOrDownButton,
+  ScrollToTheSideButton,
+  InfoButton,
+  CloseButton,
+  RoundButton,
+  PlayButton,
+  BackButton,
 };
 
 const styles = StyleSheet.create({
@@ -130,6 +206,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter_500Medium',
     fontWeight: FontWeight,
   },
+  smallButtonText: {
+    color: FontColors.light.background,
+    fontSize: ButtonFontSize.small,
+    fontFamily: 'Inter_500Medium',
+    fontWeight: FontWeight,
+  },
   linearGradient: {
     flex: 1,
     justifyContent: 'center',
@@ -137,11 +219,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   roundButton: {
-    width: 101,
-    height: 103,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 10,
     borderRadius: 100,
     ...shadowStyles,
   },
@@ -152,13 +231,3 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
 });
-
-export {
-  RectangleGradientButton,
-  RecordGradientButton,
-  GradientIconButton,
-  ScrollButtonDown,
-  ScrollToTheSideButton,
-  InfoButton,
-  CloseButton,
-};

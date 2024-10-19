@@ -1,10 +1,10 @@
 import { getLocales } from 'expo-localization';
 import { I18n } from 'i18n-js';
-import { Volume } from 'lucide-react-native';
 
 const translationsObj = {
   en: {
     welcome: 'Welcome',
+    flute: 'Flute',
     tellUsAboutYourself: 'Tell us about yourself!',
     question: 'question1Question',
     choices1: 'choices111',
@@ -30,9 +30,23 @@ const translationsObj = {
     thumb: 'Thumb',
     wrong: 'Wrong',
     great: 'Great',
+    play: 'Play',
+    colors: 'Colors',
+    notPlayed: 'Not played',
+    playedRight: 'Played Right',
+    playedWrong: 'Played Wrong',
+    goBack: 'Go Back',
+    thisPageDoesNotExist: 'This page does not exist',
+    treble: 'Treble',
+    bass: 'Bass',
+    alto: 'Alto',
+    soprano: 'Soprano',
+    selectClef: 'Select the Clef',
+    search: 'Search',
   },
   de: {
     welcome: 'Wilkommen',
+    flute: 'Flöte',
     tellUsAboutYourself: 'Erzähl uns über dich!',
     question: 'Frage1',
     choices1: 'auswahl1',
@@ -58,6 +72,19 @@ const translationsObj = {
     thumb: 'Daumen',
     wrong: 'Falsch',
     great: 'Super',
+    play: 'Spielen',
+    colors: 'Farben',
+    notPlayed: 'Nicht gespielt',
+    playedRight: 'Richtig gespielt',
+    playedWrong: 'Falsch gespielt',
+    goBack: 'Zurück',
+    thisPageDoesNotExist: 'Diese Seite existiert nicht',
+    treble: 'Treble',
+    bass: 'Bass',
+    alto: 'Alto',
+    soprano: 'Soprano',
+    selectClef: 'Wähle den Clef',
+    search: 'Suche',
   },
 };
 
