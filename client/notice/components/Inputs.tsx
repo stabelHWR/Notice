@@ -15,7 +15,7 @@ interface InputProps {
   displayedText: string;
 }
 interface SelectProps extends InputProps {
-  selectedItems: any[];
+  inputItems: any[];
   onPress?: (event: GestureResponderEvent) => void;
 }
 interface CustomReactDropdownProps extends SelectProps {
@@ -23,11 +23,11 @@ interface CustomReactDropdownProps extends SelectProps {
   setValue: (value: any) => void;
 }
 
-const CustomDropdown: React.FC<SelectProps> = ({ displayedText, selectedItems, onPress }) => {
-  const [selectedItem, setSelectedItem] = useState<any>(null);
+const CustomDropdown: React.FC<SelectProps> = ({ displayedText, inputItems, onPress }) => {
+  const [inputItem, setinputItem] = useState<any>(null);
 
   const handlePress = (item: any) => {
-    setSelectedItem(selectedItem === item ? null : item);
+    setinputItem(inputItem === item ? null : item);
     if (onPress) {
       onPress;
     }
@@ -36,7 +36,7 @@ const CustomDropdown: React.FC<SelectProps> = ({ displayedText, selectedItems, o
   return (
     <VStack style={{ backgroundColor: backgroundColor }}>
       <BoldText displayedText={displayedText} />
-      {selectedItems.map((selectItem, index) => (
+      {inputItems.map((selectItem, index) => (
         <CheckBox
           key={index}
           center
@@ -46,7 +46,7 @@ const CustomDropdown: React.FC<SelectProps> = ({ displayedText, selectedItems, o
           checkedColor={secondaryColorNeonBlue}
           uncheckedColor={secondaryColorNeonBlue}
           onPress={() => handlePress(selectItem)}
-          checked={selectedItem === selectItem}
+          checked={inputItem === selectItem}
           containerStyle={{
             backgroundColor: backgroundColor,
             alignContent: 'flex-start',
@@ -77,20 +77,19 @@ const CustomInput: React.FC<InputProps> = ({ displayedText }) => {
   );
 };
 const CustomReactDropdown: React.FC<Omit<CustomReactDropdownProps, 'displayedText'>> = ({
-  selectedItems,
+  inputItems,
   value,
   setValue,
 }) => {
   const [isFocus, setIsFocus] = useState(false);
 
-  const setLabelAndValue = (selectedItem: any) => {
-    const labelAndValue =
-      selectedItem[0].toUpperCase() + selectedItem.slice(1, selectedItem.length - 1);
+  const setLabelAndValue = (inputItem: any) => {
+    const labelAndValue = inputItem[0].toUpperCase() + inputItem.slice(1, inputItem.length - 1);
     return labelAndValue;
   };
 
-  const data = selectedItems.map((selectedItem) => {
-    const labelAndValue = setLabelAndValue(selectedItem);
+  const data = inputItems.map((inputItem) => {
+    const labelAndValue = setLabelAndValue(inputItem);
     return {
       label: labelAndValue,
       value: labelAndValue,
@@ -108,7 +107,7 @@ const CustomReactDropdown: React.FC<Omit<CustomReactDropdownProps, 'displayedTex
       maxHeight={300}
       labelField="label"
       valueField="value"
-      placeholder={!isFocus ? i18n.t('selectClef') : setLabelAndValue(selectedItems[0])}
+      placeholder={!isFocus ? setLabelAndValue(inputItems[0]) : i18n.t('selectClef')}
       searchPlaceholder={i18n.t('search')}
       value={value}
       iconColor={secondaryColorNeonBlue}

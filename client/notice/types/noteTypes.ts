@@ -1,4 +1,4 @@
-import { AllNotes } from '@/constants/texts/Notes';
+import { AllNoteNames } from '@/constants/texts/Notes';
 import { Position } from './componentTypes';
 
 type PlayingStatus = 'notPlayed' | 'failed' | 'success';
@@ -26,7 +26,7 @@ interface NotesData {
 }
 
 type Note = {
-  noteName: AllNotes;
+  noteName: AllNoteNames;
   status: PlayingStatus;
   linePosition: Position;
 };

@@ -6,7 +6,7 @@ import { VStack } from '@/components/ui/vstack';
 import i18n from '@/constants/texts/Translations';
 import { containerStyles } from '@/components/styles';
 import { ChartLine } from 'lucide-react-native';
-import { router } from 'expo-router';
+import { router, useGlobalSearchParams } from 'expo-router';
 import { NormalIcon } from '@/components/Icons';
 import { CustomPopUpModal, NoteModal } from '@/components/Modals';
 import { secondaryColorNeonBlue, StatusColors } from '@/constants/Colors';
@@ -27,7 +27,6 @@ interface ColorDefinitionProps {
 }
 interface NoteStructureProps {
   note: NotePlay;
-  clef: Clef;
   index: number;
   onPress: (event: GestureResponderEvent) => void;
   setButtonPosition: React.Dispatch<React.SetStateAction<{ x: number; y: number }>>;
@@ -49,7 +48,7 @@ const NoteStructure: React.FC<NoteStructureProps> = ({
   setButtonPosition,
 }) => {
   const marginRight = -(index * 50) + 280;
-  //TODO figire out proper margins for the lines and the notes
+  //TODO figure out proper margins for the lines and the notes
 
   return (
     <VStack>
@@ -83,8 +82,13 @@ const NoteStructure: React.FC<NoteStructureProps> = ({
 
 export default function Progress() {
   const NUMBER_OF_NOTES = 6;
+  const { selectedClef } = useGlobalSearchParams<{
+    selectedClef?: string;
+  }>();
 
-  const [currentlyDisplayedClef, setCurrentlyDisplayedClef] = useState(Clef.Soprano);
+  const [currentlyDisplayedClef, setCurrentlyDisplayedClef] = useState(
+    selectedClef ? (selectedClef as Clef) : Clef.Soprano
+  );
   const [infoModalVisibility, setInfoModalVisibility] = useState(false);
   const [, setNotesData] = useState<NotesData | undefined>();
   const [playedNotes, setPlayedNotes] = useState<NotePlay[]>([]);
@@ -126,7 +130,7 @@ export default function Progress() {
         <CustomReactDropdown
           value={currentlyDisplayedClef}
           setValue={setCurrentlyDisplayedClef}
-          selectedItems={CLEFS}
+          inputItems={CLEFS}
         />
         <CustomPopUpModal
           modalVisibility={infoModalVisibility}
@@ -148,7 +152,6 @@ export default function Progress() {
             .map((note, index) => (
               <NoteStructure
                 note={note}
-                clef={currentlyDisplayedClef}
                 key={`NoteStructureWithIndex${index}`}
                 index={index}
                 onPress={() => handleNoteButtonPress(note)}

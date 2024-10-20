@@ -30,7 +30,7 @@ export default function BeginnerQuiz() {
       <VStack style={containerStyles.mainFlexStartContainer}>
         {currentQuestion.type === 'multipleChoice' ? (
           <CustomDropdown
-            selectedItems={
+            inputItems={
               currentQuestion.choices
                 ? currentQuestion.choices.map((choice) => i18n.t(choice))
                 : ['']

@@ -12,13 +12,13 @@ import {
   ScrollToTheSideButton,
   RecordGradientButton,
   PlayButton,
+  BackButton,
 } from '@/components/CustomButtons';
-import { AllNotes, CLEFS } from '@/constants/texts/Notes';
+import { CLEFS } from '@/constants/texts/Notes';
 import { Audio } from 'expo-av';
-import PageView from '@/components/PageView';
-import { useGlobalSearchParams } from 'expo-router';
+import { useGlobalSearchParams, router } from 'expo-router';
 import NotFoundScreen from '../+not-found';
-import { getNotesData, getNotes } from '../util/notesUtils';
+import { getNotesData, getNotes, doesClefOrNoteExist } from '../util/notesUtils';
 import { unloadSound, loadSound, playSound, stopSound } from '../util/playSound';
 import { startRecording, stopRecording } from '../util/recordSound';
 
@@ -39,7 +39,7 @@ const EvaluatedRecordingBox: React.FC<EvaluatedRecordingBoxProps> = ({
   const isHidden = evaluatedRecordingStatus === 'notRecordedInSession';
 
   return (
-    <VStack style={{ height: 68, opacity: isHidden ? 0 : 1, width: '100%', alignItems: 'center' }}>
+    <VStack style={{ height: 58, opacity: isHidden ? 0 : 1, width: '100%', alignItems: 'center' }}>
       <InfoText displayedText={`${i18n.t(recordingStatus)}:`} status={recordingStatus} />
     </VStack>
   );
@@ -230,27 +230,30 @@ const PracticePage: React.FC<PracticeProps> = ({ selectedClef, selectedNoteName 
 
 //TODO: figure out how we are going to save the player status. Make a separate file or save it in to the music files JSON. for now it is saved in the music files JSON
 export default function Practice() {
-  const { selectedNoteName, selectedClef } = useGlobalSearchParams<{
-    selectedNoteName?: string;
+  const { selectedClef, selectedNoteName } = useGlobalSearchParams<{
     selectedClef?: string;
+    selectedNoteName?: string;
   }>();
 
-  const isElementFound =
-    Object.values(AllNotes).includes(selectedNoteName as AllNotes) ||
-    !selectedNoteName ||
-    Object.values(Clef).includes(selectedClef as Clef) ||
-    !selectedClef;
-
-  if (!isElementFound) {
+  const isClefAndNoteFound = doesClefOrNoteExist(selectedClef, selectedNoteName);
+  if (!isClefAndNoteFound) {
     return <NotFoundScreen />;
   }
 
-  console.log({ selectedNoteName, selectedClef });
-
   return (
-    <PageView page={'./progress'}>
-      <PracticePage selectedNoteName={selectedNoteName} selectedClef={selectedClef} />
-    </PageView>
+    <VStack style={containerStyles.mainContainerForPages}>
+      <BackButton
+        onPress={() =>
+          router.push({
+            pathname: './progress',
+            params: { selectedClef: selectedClef },
+          })
+        }
+      />
+      <VStack style={containerStyles.mainCentralContainer}>
+        <PracticePage selectedNoteName={selectedNoteName} selectedClef={selectedClef} />
+      </VStack>
+    </VStack>
   );
 }
 

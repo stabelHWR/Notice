@@ -2,9 +2,9 @@ import getSound from '@/assets/audio';
 import { Clef } from '@/types/noteTypes';
 import { getCurrentInstrument } from './notesUtils';
 import { Audio } from 'expo-av';
-import { AllNotes } from '@/constants/texts/Notes';
+import { AllNoteNames } from '@/constants/texts/Notes';
 
-const loadSound = async (clef: Clef, noteName: AllNotes): Promise<Audio.Sound | null> => {
+const loadSound = async (clef: Clef, noteName: AllNoteNames): Promise<Audio.Sound | null> => {
   const currentInstrument = getCurrentInstrument();
 
   try {

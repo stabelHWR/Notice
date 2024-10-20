@@ -5,13 +5,13 @@ import { Clef } from '@/types/noteTypes';
 import { CustomSize } from '@/types/componentTypes';
 import getImage from '@/assets/images';
 import { getCurrentInstrument } from '@/app/util/notesUtils';
-import { AllNotes } from '@/constants/texts/Notes';
+import { AllNoteNames } from '@/constants/texts/Notes';
 
 interface ImageProps {
   size: CustomSize;
 }
 interface NotePlayImageProps extends ImageProps {
-  noteName: AllNotes;
+  noteName: AllNoteNames;
   clef: Clef;
 }
 

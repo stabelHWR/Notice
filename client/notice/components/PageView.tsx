@@ -8,7 +8,7 @@ interface PageViewProps {
   page?: Href<string | object>;
 }
 
-export default function Practice({ children, page }: PageViewProps) {
+export default function PageView({ children, page }: PageViewProps) {
   const directedPage = page ?? './home';
   return (
     <VStack style={containerStyles.mainContainerForPages}>

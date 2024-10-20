@@ -17,13 +17,13 @@ import cNoteSopranoSmall from '@/assets/images/instruments/flute/clefs/soprano/s
 import { ImageSourcePropType } from 'react-native';
 import { Clef, InstrumentName } from '@/types/noteTypes';
 import { CustomSize, Languages } from '@/types/componentTypes';
-import { AllNotes } from '@/constants/texts/Notes';
+import { AllNoteNames } from '@/constants/texts/Notes';
 
 type ImageGroupKey = InstrumentName | 'icons' | 'inApp';
 
 //add additional keys
 type InAppImagesKey = 'notes'; //add additional properties to the key
-type NoteKeys = AllNotes;
+type NoteKeys = AllNoteNames;
 type IconKeys = CustomSize;
 type TutorialKeys = Languages;
 type AllKeys = InAppImagesKey | NoteKeys | IconKeys | TutorialKeys;
@@ -129,7 +129,7 @@ const returnImageOrLogWarning = (image: ImageSourcePropType, imageKey: AllKeys) 
 
 const getNoteImage = (
   instrument: InstrumentName,
-  imageKey: AllNotes | TutorialKeys,
+  imageKey: AllNoteNames | TutorialKeys,
   size: CustomSize,
   clefKey?: Clef
 ): ImageSourcePropType | undefined => {
@@ -145,7 +145,7 @@ const getNoteImage = (
       [note: string]: ImageSourcePropType;
     };
 
-    const imageNoteKey = imageKey as AllNotes;
+    const imageNoteKey = imageKey as AllNoteNames;
     const clefImage = clefImageGroup[imageNoteKey];
 
     return returnImageOrLogWarning(clefImage, imageNoteKey);
@@ -170,7 +170,7 @@ export default function getImage(
   if (isInstrument) {
     const instrument = imageGroupKey as InstrumentName;
     const usedSize = size ? size : 'large';
-    const noteImage = getNoteImage(instrument, imageKey as AllNotes, usedSize, clefKey);
+    const noteImage = getNoteImage(instrument, imageKey as AllNoteNames, usedSize, clefKey);
     return noteImage;
   } else if (imageGroupKey === 'icons') {
     const iconImageKey = imageKey as IconKeys;

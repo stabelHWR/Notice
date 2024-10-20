@@ -4,7 +4,7 @@ import { VStack } from './ui/vstack';
 import { backgroundColor, secondaryColorNeonBlue } from '@/constants/Colors';
 import i18n from '@/constants/texts/Translations';
 import { GradientHeading } from './TextElements';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { containerStyles, shadowStyles } from './styles';
 import { Clef } from '@/types/noteTypes';
 import { CoordinatesTuple } from '@/types/componentTypes';
@@ -13,7 +13,7 @@ import { NotePlayImage } from './Images';
 import { CloseButton, PlayButton, RectangleGradientButton } from './CustomButtons';
 import { loadSound, playSound, stopSound, unloadSound } from '@/app/util/playSound';
 import { Audio } from 'expo-av';
-import { AllNotes } from '@/constants/texts/Notes';
+import { AllNoteNames } from '@/constants/texts/Notes';
 
 interface ModalProps {
   setModalVisibility: (visibility: boolean) => void;
@@ -25,7 +25,7 @@ interface CustomPopUpModalProps extends ModalProps {
 
 interface NoteModalProps extends ModalProps {
   buttonPosition: CoordinatesTuple;
-  noteName: AllNotes;
+  noteName: AllNoteNames;
   clef: Clef;
 }
 
@@ -66,7 +66,7 @@ const NoteModal: React.FC<NoteModalProps> = ({
 
   useEffect(() => {
     const isMounted = true;
-    router.setParams({ selectedNoteName: noteName, selectedClef: clef });
+    router.setParams({ selectedClef: clef, selectedNoteName: noteName });
 
     (async () => {
       const newSound = await loadSound(clef, noteName);
