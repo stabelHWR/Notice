@@ -17,6 +17,7 @@ import { CLEFS } from '@/constants/texts/Notes';
 import { CustomReactDropdown } from '@/components/Inputs';
 import { getNotesData, getNotes } from '../util/notesUtils';
 import { setStatusColor } from '../util/statusSetters';
+import LoadView from '../loadingScreen';
 
 interface ColorDefinitionProps {
   color:
@@ -116,7 +117,9 @@ export default function Progress() {
     setNoteModalVisibility(true);
   };
 
-  return (
+  return !playedNotes ? (
+    <LoadView />
+  ) : (
     <VStack style={containerStyles.mainContainerForPages}>
       <BackButton onPress={() => router.push('../home')} />
       <VStack style={styles.mainProgressContainer}>
@@ -124,14 +127,17 @@ export default function Progress() {
           <GradientHeading type="heading" displayedText={i18n.t('progress')} />
           <NormalIcon icon={ChartLine} style={{ marginLeft: 8 }} />
         </HStack>
+
         <VStack style={styles.tutorialContainer}>
           <InfoButton onPress={() => setInfoModalVisibility(!infoModalVisibility)} />
         </VStack>
+
         <CustomReactDropdown
           value={currentlyDisplayedClef}
           setValue={setCurrentlyDisplayedClef}
           inputItems={CLEFS}
         />
+
         <CustomPopUpModal
           modalVisibility={infoModalVisibility}
           setModalVisibility={setInfoModalVisibility}
@@ -145,6 +151,7 @@ export default function Progress() {
             />
           ))}
         </CustomPopUpModal>
+
         <VStack style={{ marginTop: '10%' }}>
           {playedNotes
             .slice(0, NUMBER_OF_NOTES)
@@ -159,6 +166,7 @@ export default function Progress() {
               />
             ))}
         </VStack>
+
         {noteModalVisibility && (
           <NoteModal
             buttonPosition={{

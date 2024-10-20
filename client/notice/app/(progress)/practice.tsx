@@ -21,6 +21,7 @@ import NotFoundScreen from '../+not-found';
 import { getNotesData, getNotes, doesClefOrNoteExist } from '../util/notesUtils';
 import { unloadSound, loadSound, playSound, stopSound } from '../util/playSound';
 import { startRecording, stopRecording } from '../util/recordSound';
+import LoadView from '../loadingScreen';
 
 interface PracticeProps {
   selectedClef?: string;
@@ -152,7 +153,9 @@ const PracticePage: React.FC<PracticeProps> = ({ selectedClef, selectedNoteName 
 
   return (
     <>
-      {currentNote && (
+      {!currentNote ? (
+        <LoadView />
+      ) : (
         <>
           <VStack style={{ marginTop: 40 }}>
             <HStack space="md" style={containerStyles.horizontalCentralContainer}>
