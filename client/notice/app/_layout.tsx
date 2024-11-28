@@ -1,43 +1,44 @@
-import React, { useEffect } from 'react';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
+import React, {useEffect} from 'react';
+import {DarkTheme, DefaultTheme, ThemeProvider} from '@react-navigation/native';
+import {Stack} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import 'react-native-reanimated';
-import { Inter_900Black, Inter_500Medium, useFonts } from '@expo-google-fonts/inter';
-import { useColorScheme } from 'react-native';
+import {Inter_900Black, Inter_500Medium, useFonts} from '@expo-google-fonts/inter';
+import {useColorScheme} from 'react-native';
+import {header} from "codec-parser";
 
 SplashScreen.preventAutoHideAsync();
 
 //TODO remove upper index bar
 // TODO should we do vibrations, sounds and where would it make sense to do animations?
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
+    const colorScheme = useColorScheme();
 
-  const [loaded] = useFonts({
-    Inter_900Black,
-    Inter_500Medium,
-  });
+    const [loaded] = useFonts({
+        Inter_900Black,
+        Inter_500Medium,
+    });
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
+    useEffect(() => {
+        if (loaded) {
+            SplashScreen.hideAsync();
+        }
+    }, [loaded]);
+
+    if (!loaded) {
+        return null;
     }
-  }, [loaded]);
 
-  if (!loaded) {
-    return null;
-  }
-
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(welcome)" options={{ headerShown: false }} />
-        <Stack.Screen name="home" options={{ headerShown: false }} />
-        <Stack.Screen name="(progress)" options={{ headerShown: false }} />
-        <Stack.Screen name="tutorials" options={{ headerShown: false }} />
-        <Stack.Screen name="settings" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" options={{ headerShown: false }} />
-      </Stack>
-    </ThemeProvider>
-  );
+    return (
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+            <Stack screenOptions={{headerShown: false}}>
+                <Stack.Screen name="(welcome)" options={{headerShown: false}}/>
+                <Stack.Screen name="home" options={{headerShown: false}}/>
+                <Stack.Screen name="(progress)" options={{headerShown: false}}/>
+                <Stack.Screen name="tutorials" options={{headerShown: false}}/>
+                <Stack.Screen name="settings" options={{headerShown: false}}/>
+                <Stack.Screen name="+not-found" options={{headerShown: false}}/>
+            </Stack>
+        </ThemeProvider>
+    );
 }

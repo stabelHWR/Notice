@@ -5,11 +5,7 @@ const questions: Array<Question> = [
   {
     questionName: 'question1',
     type: 'multipleChoice',
-    choices: ['choices1', 'choices2', 'choices3'],
-  },
-  {
-    questionName: 'question2',
-    type: 'typeIn',
+    choices: ['beginer', 'amateur', 'profi'],
   },
   {
     questionName: 'question3',

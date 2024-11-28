@@ -43,6 +43,10 @@ const translationsObj = {
     soprano: 'Soprano',
     selectClef: 'Select the Clef',
     search: 'Search',
+    beginer: 'Beginer',
+    amateur: 'Amateur',
+    profi: 'Profi',
+    question1: 'What is your current level?',
   },
   de: {
     welcome: 'Wilkommen',
@@ -85,6 +89,10 @@ const translationsObj = {
     soprano: 'Soprano',
     selectClef: 'Wähle den Clef',
     search: 'Suche',
+    beginer: 'Anfänger',
+    amateur: 'Amateur',
+    profi: 'Profi',
+    question1: 'Was ist dein aktuelles Level?',
   },
 };
 
