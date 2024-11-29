@@ -1,5 +1,16 @@
 //This file exists to map the audio files
-import soundC from '@/assets/audio/playSounds/instruments/flute/Sample.mp3';
+import soundC from '@/assets/audio/playSounds/instruments/flute/C.mp3';
+import soundCSharp from '@/assets/audio/playSounds/instruments/flute/C#.mp3';
+import soundD from '@/assets/audio/playSounds/instruments/flute/D.mp3'
+import soundDSharp from '@/assets/audio/playSounds/instruments/flute/D#.mp3';
+import soundE from '@/assets/audio/playSounds/instruments/flute/E.mp3'
+import soundF from '@/assets/audio/playSounds/instruments/flute/F.mp3'
+import soundFSharp from '@/assets/audio/playSounds/instruments/flute/F#.mp3';
+import soundG from '@/assets/audio/playSounds/instruments/flute/G.mp3'
+import soundGSharp from '@/assets/audio/playSounds/instruments/flute/G#.mp3';
+import soundA from '@/assets/audio/playSounds/instruments/flute/A.mp3'
+import soundASharp from '@/assets/audio/playSounds/instruments/flute/A#.mp3';
+import soundB from '@/assets/audio/playSounds/instruments/flute/B.mp3'
 import { Clef, InstrumentName, NoteName } from '@/types/noteTypes';
 
 interface ClefSound {

@@ -22,6 +22,7 @@ import { getNotesData, getNotes, doesClefOrNoteExist } from '../util/notesUtils'
 import { unloadSound, loadSound, playSound, stopSound } from '../util/playSound';
 import { startRecording, stopRecording } from '../util/recordSound';
 import LoadView from '../loadingScreen';
+import { getNoteFromRecording } from "@/app/util/getNoteFromRecord";
 
 interface PracticeProps {
   selectedClef?: string;
@@ -33,28 +34,28 @@ interface EvaluatedRecordingBoxProps {
 }
 
 const EvaluatedRecordingBox: React.FC<EvaluatedRecordingBoxProps> = ({
-  evaluatedRecordingStatus,
-}) => {
+                                                                       evaluatedRecordingStatus,
+                                                                     }) => {
   const recordingStatus =
-    evaluatedRecordingStatus === 'notRecordedInSession' ? 'notPlayed' : evaluatedRecordingStatus;
+      evaluatedRecordingStatus === 'notRecordedInSession' ? 'notPlayed' : evaluatedRecordingStatus;
   const isHidden = evaluatedRecordingStatus === 'notRecordedInSession';
 
   return (
-    <VStack style={{ height: 58, opacity: isHidden ? 0 : 1, width: '100%', alignItems: 'center' }}>
-      <InfoText displayedText={`${i18n.t(recordingStatus)}:`} status={recordingStatus} />
-    </VStack>
+      <VStack style={{ height: 58, opacity: isHidden ? 0 : 1, width: '100%', alignItems: 'center' }}>
+        <InfoText displayedText={`${i18n.t(recordingStatus)}:`} status={recordingStatus} />
+      </VStack>
   );
 };
 
 const PracticePage: React.FC<PracticeProps> = ({ selectedClef, selectedNoteName }) => {
   const [currentlyDisplayedClef, setCurrentlyDisplayedClef] = useState<Clef>(
-    selectedClef ? (CLEFS.find((clef) => selectedClef === clef) ?? CLEFS[0]) : CLEFS[0]
+      selectedClef ? (CLEFS.find((clef) => selectedClef === clef) ?? CLEFS[0]) : CLEFS[0]
   );
   const [currentlyDisplayedClefIndex, setCurrentlyDisplayedClefIndex] = useState(0);
   const [notesData, setNotesData] = useState<NotesData>();
   const [playedNotes, setPlayedNotes] = useState<NotePlay[]>([]);
   const [currentNoteIndex, setCurrentNoteIndex] = useState(
-    selectedNoteName ? playedNotes.findIndex((note) => selectedNoteName === note.noteName) : 0
+      selectedNoteName ? playedNotes.findIndex((note) => selectedNoteName === note.noteName) : 0
   );
   const [currentNote, setCurrentNote] = useState<null | NotePlay>(null);
   const [recording, setRecording] = useState<Audio.Recording | null>(null);
@@ -105,8 +106,8 @@ const PracticePage: React.FC<PracticeProps> = ({ selectedClef, selectedNoteName 
 
         if (playedNotes[currentNoteIndex]?.noteName) {
           const newSound = await loadSound(
-            currentlyDisplayedClef,
-            playedNotes[currentNoteIndex].noteName
+              currentlyDisplayedClef,
+              playedNotes[currentNoteIndex].noteName
           );
           setSound(newSound);
         }
@@ -140,94 +141,115 @@ const PracticePage: React.FC<PracticeProps> = ({ selectedClef, selectedNoteName 
 
     if (newIsRecording) {
       setResultStatus('notRecordedInSession');
-      const newRecording = await startRecording(recording, permissionResponse);
-      setRecording(newRecording);
-      stopSound(sound);
+      try {
+        // Start a new recording session
+        if (permissionResponse) {
+          const newRecording = await startRecording(recording, permissionResponse);
+          setRecording(newRecording);
+          stopSound(sound);
+        } else {
+          console.error('Permission response is null');
+        }
+      } catch (error) {
+        console.error('Error starting recording:', error);
+      }
     } else {
-      await stopRecording(recording);
+      if (recording) {
+        try {
+          // Stop the recording and process the file
+          const uri = await stopRecording(recording);
+          if (uri) {
+            const note = await getNoteFromRecording(uri);
+            console.log(`Detected note: ${note}`);
+          }
+        } catch (error) {
+          console.error('Error stopping recording:', error);
+        }
+      }
+
       setRecording(null);
-      const evaluatedRecordingResult: PlayingStatus = 'failed';
+      const evaluatedRecordingResult: PlayingStatus = 'failed'; // Adjust based on actual logic
       setResultStatus(evaluatedRecordingResult);
     }
   };
 
   return (
-    <>
-      {!currentNote ? (
-        <LoadView />
-      ) : (
-        <>
-          <VStack style={{ marginTop: 40 }}>
-            <HStack space="md" style={containerStyles.horizontalCentralContainer}>
-              {resultStatus === 'notRecordedInSession' ? (
-                <GradientHeading type="heading" displayedText={currentNote.noteName} />
-              ) : (
-                <StatusHeading
-                  type="heading"
-                  displayedText={currentNote.noteName}
-                  status={
-                    (resultStatus as RecordingStatus) !== 'notRecordedInSession'
-                      ? resultStatus
-                      : 'notPlayed'
-                  }
-                />
-              )}
-              {resultStatus !== 'notRecordedInSession' && resultStatus !== 'notPlayed' && (
-                <PlayedStatusIcon status={resultStatus} style={{ marginTop: 25 }} />
-              )}
-            </HStack>
-            {resultStatus === 'notRecordedInSession' && (
-              <GradientHeading
-                type="subheading"
-                displayedText={notesData?.clef ? i18n.t(notesData?.clef) : ''}
-              />
-            )}
-          </VStack>
-          <VStack style={{ alignItems: 'center', marginTop: 10 }}>
-            <HStack
-              space="md"
-              style={[
-                containerStyles.horizontalCentralContainer,
-                { alignItems: 'center', marginBottom: 10 },
-              ]}
-            >
-              {currentNoteIndex > 0 && !isRecording && (
-                <ScrollToTheSideButton
-                  onPress={() => changeNote(currentNoteIndex - 1)}
-                  isLeft={true}
-                />
-              )}
+      <>
+        {!currentNote ? (
+            <LoadView />
+        ) : (
+            <>
+              <VStack style={{ marginTop: 40 }}>
+                <HStack space="md" style={containerStyles.horizontalCentralContainer}>
+                  {resultStatus === 'notRecordedInSession' ? (
+                      <GradientHeading type="heading" displayedText={currentNote.noteName} />
+                  ) : (
+                      <StatusHeading
+                          type="heading"
+                          displayedText={currentNote.noteName}
+                          status={
+                            (resultStatus as RecordingStatus) !== 'notRecordedInSession'
+                                ? resultStatus
+                                : 'notPlayed'
+                          }
+                      />
+                  )}
+                  {resultStatus !== 'notRecordedInSession' && resultStatus !== 'notPlayed' && (
+                      <PlayedStatusIcon status={resultStatus} style={{ marginTop: 25 }} />
+                  )}
+                </HStack>
+                {resultStatus === 'notRecordedInSession' && (
+                    <GradientHeading
+                        type="subheading"
+                        displayedText={notesData?.clef ? i18n.t(notesData?.clef) : ''}
+                    />
+                )}
+              </VStack>
+              <VStack style={{ alignItems: 'center', marginTop: 10 }}>
+                <HStack
+                    space="md"
+                    style={[
+                      containerStyles.horizontalCentralContainer,
+                      { alignItems: 'center', marginBottom: 10 },
+                    ]}
+                >
+                  {currentNoteIndex > 0 && !isRecording && (
+                      <ScrollToTheSideButton
+                          onPress={() => changeNote(currentNoteIndex - 1)}
+                          isLeft={true}
+                      />
+                  )}
 
-              <NotePlayImage
-                noteName={currentNote.noteName}
-                clef={currentlyDisplayedClef}
-                size="large"
-              />
+                  <NotePlayImage
+                      noteName={currentNote.noteName}
+                      clef={currentlyDisplayedClef}
+                      size="large"
+                  />
 
-              {currentNoteIndex < playedNotes.length - 1 && !isRecording && (
-                <ScrollToTheSideButton
-                  onPress={() => changeNote(currentNoteIndex + 1)}
-                  isLeft={false}
+                  {currentNoteIndex < playedNotes.length - 1 && !isRecording && currentNoteIndex < 1 && (
+                      <ScrollToTheSideButton
+                          onPress={() => changeNote(currentNoteIndex + 1)}
+                          isLeft={false}
+                      />
+                  )}
+                </HStack>
+                <VStack style={{ opacity: !isRecording ? 1 : 0 }}>
+                  <PlayButton onPress={() => playSound(sound)} />
+                </VStack>
+              </VStack>
+              <VStack style={{ alignItems: 'center', marginTop: 2 }}>
+                <VStack style={{ opacity: isRecording ? 1 : 0, marginTop: 5 }}>
+                  <ThreeNotes width={40} height={40} />
+                </VStack>
+                <EvaluatedRecordingBox evaluatedRecordingStatus={resultStatus} />
+                <RecordGradientButton
+                    isRecording={!isRecording}
+                    onPress={() => startOrStopRecording()}
                 />
-              )}
-            </HStack>
-            <VStack style={{ opacity: !isRecording ? 1 : 0 }}>
-              <PlayButton onPress={() => playSound(sound)} />
-            </VStack>
-          </VStack>
-          <VStack style={{ alignItems: 'center', marginTop: 2 }}>
-            <VStack style={{ opacity: isRecording ? 1 : 0, marginTop: 5 }}>
-              <ThreeNotes width={40} height={40} />
-            </VStack>
-            <EvaluatedRecordingBox evaluatedRecordingStatus={resultStatus} />
-            <RecordGradientButton
-              isRecording={!isRecording}
-              onPress={() => startOrStopRecording()}
-            />
-          </VStack>
-        </>
-      )}
-    </>
+              </VStack>
+            </>
+        )}
+      </>
   );
 };
 
@@ -244,19 +266,19 @@ export default function Practice() {
   }
 
   return (
-    <VStack style={containerStyles.mainContainerForPages}>
-      <BackButton
-        onPress={() =>
-          router.push({
-            pathname: './progress',
-            params: { selectedClef: selectedClef },
-          })
-        }
-      />
-      <VStack style={containerStyles.mainCentralContainer}>
-        <PracticePage selectedNoteName={selectedNoteName} selectedClef={selectedClef} />
+      <VStack style={containerStyles.mainContainerForPages}>
+        <BackButton
+            onPress={() =>
+                router.push({
+                  pathname: './progress',
+                  params: { selectedClef: selectedClef },
+                })
+            }
+        />
+        <VStack style={containerStyles.mainCentralContainer}>
+          <PracticePage selectedNoteName={selectedNoteName} selectedClef={selectedClef} />
+        </VStack>
       </VStack>
-    </VStack>
   );
 }
 

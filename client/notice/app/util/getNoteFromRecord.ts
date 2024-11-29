@@ -28,6 +28,7 @@ function calculateNoteFromFrequency(freq: number): string {
     const octave = Math.floor(halfStepsFromC0 / 12);
     const noteIndex = (halfStepsFromC0 % 12 + 12) % 12;
 
+    console.log(noteNames[noteIndex])
     return noteNames[noteIndex] + octave;
 }
 
