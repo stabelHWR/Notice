@@ -43,8 +43,18 @@ const soundPathMap: SoundPathMap = {
     },
     soprano: {
       C: soundC,
-      D: soundC,
-      // ...TODO : add notes
+      CSharp: soundCSharp,
+      D: soundD,
+      DSharp: soundDSharp,
+      E: soundE,
+      F: soundF,
+      FSharp: soundFSharp,
+      G: soundG,
+      GSharp: soundGSharp,
+      A: soundA,
+      ASharp: soundASharp,
+      B: soundB,
+      // ...TODO : add notes in the audio/playSounds/instruments/flute directory
     },
   },
 };
