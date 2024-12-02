@@ -1,5 +1,5 @@
 import React from "react";
-import { PracticePage } from './practice';
+import PracticePage from './practice';
 
 const PracticeAlone = () => {
     return <PracticePage />;
