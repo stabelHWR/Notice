@@ -22,7 +22,8 @@ import { getNotesData, getNotes, doesClefOrNoteExist } from '../util/notesUtils'
 import { unloadSound, loadSound, playSound, stopSound } from '../util/playSound';
 import { startRecording, stopRecording } from '../util/recordSound';
 import LoadView from '../loadingScreen';
-import { getNoteFromRecording } from '@/app/util/getNoteFromRecord';
+import { getNoteFromRecording } from "@/app/util/getNoteFromRecord";
+import { Buffer } from 'buffer';
 
 interface PracticeProps {
     selectedClef?: string;
@@ -90,6 +91,35 @@ const PracticePage: React.FC<PracticeProps> = ({ selectedClef, selectedNoteName 
         fetchNotes();
     }, [currentlyDisplayedClefIndex, currentlyDisplayedClef]);
 
+    useEffect(() => {
+        const setNewNote = async () => {
+            if (currentNote) {
+                setCurrentNote(playedNotes[currentNoteIndex]);
+                setIsRecording(false);
+
+                if (isRecording && recording) {
+                    setRecording(null);
+                }
+
+                if (sound) {
+                    unloadSound(sound);
+                }
+
+                if (playedNotes[currentNoteIndex]?.noteName) {
+                    const newSound = await loadSound(
+                        currentlyDisplayedClef,
+                        playedNotes[currentNoteIndex].noteName
+                    );
+                    setSound(newSound);
+                }
+
+                setResultStatus('notRecordedInSession');
+            }
+        };
+
+        setNewNote();
+    }, [currentNoteIndex, currentNote, playedNotes, currentlyDisplayedClef]);
+
     const changeNote = async (newIndex: number) => {
         if (newIndex >= playedNotes.length) {
             const newClefIndex = currentlyDisplayedClefIndex + 1;
@@ -111,13 +141,20 @@ const PracticePage: React.FC<PracticeProps> = ({ selectedClef, selectedNoteName 
         setIsRecording(newIsRecording);
 
         if (newIsRecording) {
+            setResultStatus('notRecordedInSession');
             try {
+                if (recording) {
+                    await recording.stopAndUnloadAsync();
+                    setRecording(null);
+                }
+
                 const { granted } = await Audio.requestPermissionsAsync();
                 if (!granted) {
                     throw new Error('Permissions not granted to record audio');
                 }
 
-                const newRecording = await startRecording();
+                const { recording: newRecording } = await startRecording('wav');
+                setRecording(newRecording);
                 stopSound(sound);
             } catch (error) {
                 console.error('Error starting recording:', error);
@@ -125,18 +162,19 @@ const PracticePage: React.FC<PracticeProps> = ({ selectedClef, selectedNoteName 
         } else {
             if (recording) {
                 try {
-                    const uri = await stopRecording();
+                    const uri = await stopRecording(recording);
                     if (uri) {
                         const note = await getNoteFromRecording(uri);
                         console.log(`Detected note: ${note}`);
+                        setResultStatus(note ? 'success' : 'failed');
                     }
                 } catch (error) {
                     console.error('Error stopping recording:', error);
+                    setResultStatus('failed');
                 }
             }
 
             setRecording(null);
-            setResultStatus('failed');
         }
     };
 
@@ -205,6 +243,9 @@ const PracticePage: React.FC<PracticeProps> = ({ selectedClef, selectedNoteName 
                         </VStack>
                     </VStack>
                     <VStack style={{ alignItems: 'center', marginTop: 2 }}>
+                        <VStack style={{ opacity: isRecording ? 1 : 0, marginTop: 5 }}>
+                            <ThreeNotes width={40} height={40} />
+                        </VStack>
                         <EvaluatedRecordingBox evaluatedRecordingStatus={resultStatus} />
                         <RecordGradientButton
                             isRecording={!isRecording}
@@ -217,4 +258,32 @@ const PracticePage: React.FC<PracticeProps> = ({ selectedClef, selectedNoteName 
     );
 };
 
-export default PracticePage;
+export default function Practice() {
+    const { selectedClef, selectedNoteName } = useGlobalSearchParams<{
+        selectedClef?: string;
+        selectedNoteName?: string;
+    }>();
+
+    const isClefAndNoteFound = doesClefOrNoteExist(selectedClef, selectedNoteName);
+    if (!isClefAndNoteFound) {
+        return <NotFoundScreen />;
+    }
+
+    return (
+        <VStack style={containerStyles.mainContainerForPages}>
+            <BackButton
+                onPress={() =>
+                    router.push({
+                        pathname: './progress',
+                        params: { selectedClef: selectedClef },
+                    })
+                }
+            />
+            <VStack style={containerStyles.mainCentralContainer}>
+                <PracticePage selectedNoteName={selectedNoteName} selectedClef={selectedClef} />
+            </VStack>
+        </VStack>
+    );
+}
+
+export { PracticePage };
