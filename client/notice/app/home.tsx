@@ -31,7 +31,7 @@ export default function BeginnerQuiz() {
           displayedText={i18n.t('settings')}
           onPress={() => router.push('./settings')}
         />
-          <RectangleGradientButton onPress={()=>router.push(".//(welcome)/beginnerQuiz")} displayedText={"Beginner Quiz"} />
+          <RectangleGradientButton onPress={()=>router.push("./(progress)/practice_alone")} displayedText={"Übung"} />
       </VStack>
       <Logo size={'large'} />
     </VStack>
