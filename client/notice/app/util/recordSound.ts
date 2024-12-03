@@ -20,7 +20,7 @@ const playRecordedAudio = async (recordedURI: string) => {
   }
 };
 
-const openFile = async (filePath: any) => {
+const openFile = async (filePath: string) => {
   try {
     const fileInfo = await FileSystem.getInfoAsync(filePath);
 
@@ -36,6 +36,20 @@ const openFile = async (filePath: any) => {
   }
 };
 
+const deleteFile = async (filePath: string) => {
+  try {
+    const fileInfo = await FileSystem.getInfoAsync(filePath);
+
+    if (fileInfo.exists) {
+      await FileSystem.deleteAsync(filePath);
+      console.log('File deleted:', filePath);
+    } else {
+      console.log('File does not exist, cannot delete:', filePath);
+    }
+  } catch (error) {
+    console.error('Error deleting file:', error);
+  }
+};
 
 const startRecording = async (
   permissionResponse: Audio.PermissionResponse | null
@@ -101,4 +115,4 @@ const stopRecording = async (recording: Audio.Recording | null) => {
 };
 
 
-export { startRecording, stopRecording, playRecordedAudio };
+export { startRecording, stopRecording, playRecordedAudio, openFile, deleteFile };
