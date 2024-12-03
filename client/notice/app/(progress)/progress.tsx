@@ -110,6 +110,7 @@ export default function Progress() {
       setPlayedNotes(getNotes(notes));
     };
     fetchNotes();
+    
   }, [currentlyDisplayedClef]);
 
   const handleNoteButtonPress = async (note: NotePlay) => {

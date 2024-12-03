@@ -44,6 +44,7 @@ interface InstrumentImages {
   [Clef.Treble]: ClefImages;
 
   [Clef.Soprano]: ClefImages;
+  [Clef.MockSoprano]: ClefImages;
 
   tutorials: TutorialImages;
 }
@@ -92,6 +93,20 @@ const imagePathMap: ImagePathMap = {
       },
     },
     soprano: {
+      large: {
+        C: cNoteSopranoLarge,
+        D: dNoteSopranoLarge,
+      },
+      medium: {
+        //make small images
+      },
+      small: {
+        C: cNoteSopranoSmall,
+      },
+
+      // ...TODO : add notes
+    },
+    mockSoprano: {
       large: {
         C: cNoteSopranoLarge,
         D: dNoteSopranoLarge,

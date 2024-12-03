@@ -1,6 +1,6 @@
 import { Clef } from '@/types/noteTypes';
 
-const CLEFS: Clef[] = [Clef.Soprano, Clef.Treble, Clef.Bass, Clef.Alto];
+const CLEFS: Clef[] = [Clef.Soprano, Clef.Treble, Clef.Bass, Clef.Alto,Clef.MockSoprano];
 enum AllNoteNames {
   DFlat = 'DB',
   EFlat = 'EB',

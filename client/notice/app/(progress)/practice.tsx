@@ -114,7 +114,7 @@ const PracticePage: React.FC<PracticeProps> = ({ selectedClef, selectedNoteName 
           setSound(newSound);
         }
 
-        setResultStatus('notRecordedInSession');
+        // setResultStatus('notRecordedInSession');
       }
     };
 
@@ -161,22 +161,14 @@ const PracticePage: React.FC<PracticeProps> = ({ selectedClef, selectedNoteName 
       setResultsLoading(false)
       const evaluatedRecordingResult: RecordingStatus = 'failed';
       setResultStatus(evaluatedRecordingResult);
-      updateNoteStatus(evaluatedRecordingResult)
+      updateNoteStatus()
     }
   };
 
-  const updateNoteStatus = async (resultStatus: RecordingStatus) => {
+  const updateNoteStatus = () => {
     if (!currentNote || !notesData) return;
 
-    const updatedNotes = playedNotes.map((note) =>
-      note.noteName === currentNote.noteName
-        ? { ...note, status: resultStatus }
-        : note
-    );
-
-    const updatedNotesData:any = { ...playedNotes, notes: updatedNotes };
-    setNotesData(updatedNotesData); 
-    await saveUpdatedNotesData(updatedNotesData, currentlyDisplayedClef);
+    setCurrentlyDisplayedClef(Clef.MockSoprano)
   }
 
   return (
@@ -276,7 +268,7 @@ export default function Practice() {
         onPress={() =>
           router.push({
             pathname: './progress',
-            params: { selectedClef: selectedClef },
+            params: { selectedClef: Clef.MockSoprano },
           })
         }
       />

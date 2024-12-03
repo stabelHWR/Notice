@@ -1,9 +1,9 @@
 //This file exists to map the audio files
 import soundC from '@/assets/audio/playSounds/instruments/flute/Sample.mp3';
-import { Clef, InstrumentName, NoteName } from '@/types/noteTypes';
+import { Clef, InstrumentName } from '@/types/noteTypes';
 
 interface ClefSound {
-  [noteName: NoteName]: number;
+  [noteName: string]: number;
 }
 
 interface InstrumentSound {
@@ -12,6 +12,7 @@ interface InstrumentSound {
   [Clef.Treble]: ClefSound;
 
   [Clef.Soprano]: ClefSound;
+  [Clef.MockSoprano]: ClefSound;
 }
 
 interface SoundPathMap {
@@ -35,13 +36,18 @@ const soundPathMap: SoundPathMap = {
       D: soundC,
       // ...TODO : add notes
     },
+    mockSoprano: {
+      C: soundC,
+      D: soundC,
+      // ...TODO : add notes
+    },
   },
 };
 
 export default function getSound(
   instrument: InstrumentName,
   clefKey: Clef,
-  noteName: NoteName
+  noteName: string
 ): number | undefined {
   const instrumentsoundGroup = soundPathMap[instrument];
 

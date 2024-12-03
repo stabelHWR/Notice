@@ -20,11 +20,13 @@ const getNotesData = async (clef: Clef | string | undefined): Promise<NotesData>
   const instrument = getCurrentInstrument();
   const noteData = await loadNoteData(instrument);
 
-  const { soprano, alto, treble, bass } = noteData;
+  const { soprano, mockSoprano, alto, treble, bass } = noteData;
 
   switch (clef) {
     case 'soprano':
       return soprano;
+    case 'mockSoprano':
+      return mockSoprano;
     case 'alto':
       return alto;
     case 'treble':
@@ -53,7 +55,6 @@ const doesClefExist = (clef: string | Clef | undefined): boolean => {
   if (!clefExists) {
     console.log(`${clef} does not exist in clefs`);
   }
-  console.log(clefExists, 1878);
 
   return clefExists;
 };
@@ -65,7 +66,6 @@ const doesNoteExist = (noteName: string | AllNoteNames | undefined): boolean => 
   if (!noteExists) {
     console.log(`${noteName} does not exist in notes`);
   }
-  console.log(noteExists, 1878);
   return noteExists;
 };
 const doesClefOrNoteExist = (
