@@ -43,6 +43,8 @@ const translationsObj = {
     soprano: 'Soprano',
     selectClef: 'Select the Clef',
     search: 'Search',
+    success: "Success",
+    error: "Error",
   },
   de: {
     welcome: 'Wilkommen',
@@ -85,6 +87,8 @@ const translationsObj = {
     soprano: 'Soprano',
     selectClef: 'Wähle den Clef',
     search: 'Suche',
+    success: "Erfolgreich",
+    error: "Fehlerhaft",
   },
 };
 

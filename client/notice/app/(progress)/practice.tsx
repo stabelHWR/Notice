@@ -23,6 +23,7 @@ import { unloadSound, loadSound, playSound, stopSound } from '../util/playSound'
 import { startRecording, stopRecording } from '../util/recordSound';
 import LoadView from '../loadingScreen';
 
+
 interface PracticeProps {
   selectedClef?: string;
   selectedNoteName?: string;
@@ -62,7 +63,7 @@ const PracticePage: React.FC<PracticeProps> = ({ selectedClef, selectedNoteName 
   const [isRecording, setIsRecording] = useState(false);
   const [resultStatus, setResultStatus] = useState<RecordingStatus>('notRecordedInSession');
   const [sound, setSound] = useState<Audio.Sound | null>(null);
-
+  
   useEffect(() => {
     const fetchNotes = async () => {
       const notesData = await getNotesData(currentlyDisplayedClef);
@@ -140,9 +141,11 @@ const PracticePage: React.FC<PracticeProps> = ({ selectedClef, selectedNoteName 
 
     if (newIsRecording) {
       setResultStatus('notRecordedInSession');
-      const newRecording = await startRecording(recording, permissionResponse);
-      setRecording(newRecording);
-      stopSound(sound);
+      const newRecording = await startRecording(permissionResponse);
+      if(newRecording){
+        setRecording(newRecording);
+        stopSound(sound);
+      }
     } else {
       await stopRecording(recording);
       setRecording(null);
@@ -259,5 +262,3 @@ export default function Practice() {
     </VStack>
   );
 }
-
-export { PracticePage };

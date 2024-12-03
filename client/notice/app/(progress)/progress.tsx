@@ -145,7 +145,7 @@ export default function Progress() {
           <GradientHeading type="subheading" displayedText={i18n.t('colors')} />
           {Object.entries(StatusColors).map(([status, config]) => (
             <ColorDefinition
-              displayedText={i18n.t(status)}
+              displayedText={config.text}
               color={config.background}
               key={status}
             />
