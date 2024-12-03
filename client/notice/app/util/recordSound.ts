@@ -102,12 +102,12 @@ const stopRecording = async (recording: Audio.Recording | null) => {
 
     // Move the recording to the new directory with the new file name
     await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'recordings/', { intermediates: true });
-    const c = FileSystem.documentDirectory + 'recordings/' + `${fileName}`
+    const filePath = FileSystem.documentDirectory + 'recordings/' + `${fileName}`
     await FileSystem.moveAsync({
       from: recordingUri ? recordingUri: "",
-      to: c
+      to: filePath
     });
-    await openFile(c)
+    return filePath;
   } catch (err) {
     console.error('Failed to stop recording', err);
     return null;

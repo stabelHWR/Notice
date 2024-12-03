@@ -5,7 +5,7 @@ import { HStack } from '@/components/ui/hstack';
 import { VStack } from '@/components/ui/vstack';
 import { containerStyles } from '@/components/styles';
 import i18n from '@/constants/texts/Translations';
-import { NotesData, NotePlay, RecordingStatus, Clef, PlayingStatus } from '@/types/noteTypes';
+import { NotesData, NotePlay, RecordingStatus, Clef } from '@/types/noteTypes';
 import { PlayedStatusIcon } from '@/components/Icons';
 import { NotePlayImage } from '@/components/Images';
 import {
@@ -18,9 +18,9 @@ import { CLEFS } from '@/constants/texts/Notes';
 import { Audio } from 'expo-av';
 import { useGlobalSearchParams, router } from 'expo-router';
 import NotFoundScreen from '../+not-found';
-import { getNotesData, getNotes, doesClefOrNoteExist } from '../util/notesUtils';
+import { getNotesData, getNotes, doesClefOrNoteExist, saveUpdatedNotesData } from '../util/notesUtils';
 import { unloadSound, loadSound, playSound, stopSound } from '../util/playSound';
-import { startRecording, stopRecording } from '../util/recordSound';
+import { deleteFile, openFile, startRecording, stopRecording } from '../util/recordSound';
 import LoadView from '../loadingScreen';
 
 
@@ -41,9 +41,10 @@ const EvaluatedRecordingBox: React.FC<EvaluatedRecordingBoxProps> = ({
   const isHidden = evaluatedRecordingStatus === 'notRecordedInSession';
 
   return (
-    <VStack style={{ height: 58, opacity: isHidden ? 0 : 1, width: '100%', alignItems: 'center' }}>
-      <InfoText displayedText={`${i18n.t(recordingStatus)}:`} status={recordingStatus} />
-    </VStack>
+    <HStack style={{ height: 70, opacity: isHidden ? 0 : 1, width: '100%', alignItems: 'center',  flexDirection: 'row',}}>
+      <PlayedStatusIcon status={recordingStatus}/>
+      <InfoText displayedText={`${i18n.t('developmentSuggestion')}`} status={recordingStatus} />
+    </HStack>
   );
 };
 
@@ -61,6 +62,7 @@ const PracticePage: React.FC<PracticeProps> = ({ selectedClef, selectedNoteName 
   const [recording, setRecording] = useState<Audio.Recording | null>(null);
   const [permissionResponse] = Audio.usePermissions();
   const [isRecording, setIsRecording] = useState(false);
+  const [resultsLoading, setResultsLoading] = useState(false);
   const [resultStatus, setResultStatus] = useState<RecordingStatus>('notRecordedInSession');
   const [sound, setSound] = useState<Audio.Sound | null>(null);
   
@@ -147,17 +149,40 @@ const PracticePage: React.FC<PracticeProps> = ({ selectedClef, selectedNoteName 
         stopSound(sound);
       }
     } else {
-      await stopRecording(recording);
+      const filePath = await stopRecording(recording);
+      setResultsLoading(true)
+      if(filePath){
+        await openFile(filePath)
+        setTimeout(async () => {
+          deleteFile(filePath)
+        }, 2000);
+      }
       setRecording(null);
-      const evaluatedRecordingResult: PlayingStatus = 'failed';
+      setResultsLoading(false)
+      const evaluatedRecordingResult: RecordingStatus = 'failed';
       setResultStatus(evaluatedRecordingResult);
+      updateNoteStatus(evaluatedRecordingResult)
     }
   };
 
+  const updateNoteStatus = async (resultStatus: RecordingStatus) => {
+    if (!currentNote || !notesData) return;
+
+    const updatedNotes = playedNotes.map((note) =>
+      note.noteName === currentNote.noteName
+        ? { ...note, status: resultStatus }
+        : note
+    );
+
+    const updatedNotesData:any = { ...playedNotes, notes: updatedNotes };
+    setNotesData(updatedNotesData); 
+    await saveUpdatedNotesData(updatedNotesData, currentlyDisplayedClef);
+  }
+
   return (
     <>
-      {!currentNote ? (
-        <LoadView />
+      {!currentNote || resultsLoading? (
+        <LoadView displayedText={resultsLoading ? i18n.t('noteAnalyzed'): undefined}/>
       ) : (
         <>
           <VStack style={{ marginTop: 40 }}>
@@ -206,7 +231,6 @@ const PracticePage: React.FC<PracticeProps> = ({ selectedClef, selectedNoteName 
                 clef={currentlyDisplayedClef}
                 size="large"
               />
-
               {currentNoteIndex < playedNotes.length - 1 && !isRecording && (
                 <ScrollToTheSideButton
                   onPress={() => changeNote(currentNoteIndex + 1)}

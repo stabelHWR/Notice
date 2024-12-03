@@ -44,7 +44,10 @@ const translationsObj = {
     selectClef: 'Select the Clef',
     search: 'Search',
     success: "Success",
+    failed: "Unfortunately it was wrong",
     error: "Error",
+    noteAnalyzed: "Note is getting analyzed",
+    developmentSuggestion: "Please play a note"
   },
   de: {
     welcome: 'Wilkommen',
@@ -74,6 +77,7 @@ const translationsObj = {
     thumb: 'Daumen',
     wrong: 'Falsch',
     great: 'Super',
+    failed: "Leider Falsch",
     play: 'Spielen',
     colors: 'Farben',
     notPlayed: 'Nicht gespielt',
@@ -89,6 +93,8 @@ const translationsObj = {
     search: 'Suche',
     success: "Erfolgreich",
     error: "Fehlerhaft",
+    noteAnalyzed: "Note wird analysiert", 
+    developmentSuggestion: "Bitte spiele eine Note"
   },
 };
 
