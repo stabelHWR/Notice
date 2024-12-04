@@ -2,6 +2,8 @@ import loadNoteData from '@/assets/playData';
 import { CURRENT_INSTRUMENT } from '@/constants/texts/AppStrings';
 import { AllNoteNames } from '@/constants/texts/Notes';
 import { Clef, InstrumentName, NotePlay, NotesData } from '@/types/noteTypes';
+import * as FileSystem from 'expo-file-system';
+
 
 const getCurrentInstrument = (): InstrumentName => {
   const instrumentExists = Object.values(InstrumentName).includes(
@@ -18,11 +20,13 @@ const getNotesData = async (clef: Clef | string | undefined): Promise<NotesData>
   const instrument = getCurrentInstrument();
   const noteData = await loadNoteData(instrument);
 
-  const { soprano, alto, treble, bass } = noteData;
+  const { soprano, mockSoprano, alto, treble, bass } = noteData;
 
   switch (clef) {
     case 'soprano':
       return soprano;
+    case 'mockSoprano':
+      return mockSoprano;
     case 'alto':
       return alto;
     case 'treble':
@@ -30,7 +34,7 @@ const getNotesData = async (clef: Clef | string | undefined): Promise<NotesData>
     case 'bass':
       return bass;
     default:
-      return soprano; // Default case
+      return soprano; 
   }
 };
 
@@ -51,7 +55,6 @@ const doesClefExist = (clef: string | Clef | undefined): boolean => {
   if (!clefExists) {
     console.log(`${clef} does not exist in clefs`);
   }
-  console.log(clefExists, 1878);
 
   return clefExists;
 };
@@ -63,7 +66,6 @@ const doesNoteExist = (noteName: string | AllNoteNames | undefined): boolean => 
   if (!noteExists) {
     console.log(`${noteName} does not exist in notes`);
   }
-  console.log(noteExists, 1878);
   return noteExists;
 };
 const doesClefOrNoteExist = (
@@ -77,6 +79,21 @@ const doesClefOrNoteExist = (
 
   return noteExists && clefExists;
 };
+
+const saveUpdatedNotesData = async (updatedNotesData: NotePlay, clef: Clef) => {
+  const filePath = `${FileSystem.documentDirectory}${clef}.json`;
+
+  try {
+    const jsonString = JSON.stringify(updatedNotesData);
+
+    // Write the file to the app's document directory
+    await FileSystem.writeAsStringAsync(filePath, jsonString);
+    console.log(`Updated notes data saved to ${filePath}`);
+  } catch (error) {
+    console.error('Error saving updated notes data:', error);
+  }
+};
+
 export {
   getCurrentInstrument,
   getNote,
@@ -85,4 +102,5 @@ export {
   doesClefExist,
   doesNoteExist,
   doesClefOrNoteExist,
+  saveUpdatedNotesData
 };

@@ -1,105 +1,118 @@
-import { Audio } from 'expo-av';
+import { Audio, InterruptionModeAndroid, InterruptionModeIOS } from 'expo-av';
 import * as FileSystem from 'expo-file-system';
-import { Buffer } from 'buffer';
 
-let recording: Audio.Recording | null = null;
 
-const generateFileName = (extension: string): string => {
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    return `${FileSystem.documentDirectory}recording-${timestamp}.${extension}`;
-};
+const playRecordedAudio = async (recordedURI: string) => {
+  try {
+    const recording = new Audio.Sound();
 
-const startRecording = async (format: 'wav' | 'mp3' = 'wav'): Promise<{ fileName: string, recording: Audio.Recording }> => {
-    try {
-        if (recording) {
-            await recording.stopAndUnloadAsync();
-            recording = null;
-        }
+    await recording.loadAsync({ uri: recordedURI });
 
-        const { status } = await Audio.requestPermissionsAsync();
-        if (status !== 'granted') {
-            throw new Error('Permissions not granted to record audio');
-        }
+    const playerStatus = await recording.getStatusAsync();
 
-        await Audio.setAudioModeAsync({
-            allowsRecordingIOS: true,
-            playsInSilentModeIOS: true,
-        });
-
-        recording = new Audio.Recording();
-        const fileName = generateFileName(format);
-        const recordingOptions = format === 'wav' ? {
-            android: {
-                extension: '.wav',
-                outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_DEFAULT,
-                audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_DEFAULT,
-                sampleRate: 44100,
-                numberOfChannels: 2,
-                bitRate: 128000,
-            },
-            ios: {
-                extension: '.wav',
-                audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_HIGH,
-                sampleRate: 44100,
-                numberOfChannels: 2,
-                bitRate: 128000,
-            },
-            web: {
-                mimeType: 'audio/wav',
-                bitsPerSecond: 128000,
-            },
-        } : {
-            android: {
-                extension: '.mp3',
-                outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_MPEG_4,
-                audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_AAC,
-                sampleRate: 44100,
-                numberOfChannels: 2,
-                bitRate: 128000,
-            },
-            ios: {
-                extension: '.mp3',
-                audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_HIGH,
-                sampleRate: 44100,
-                numberOfChannels: 2,
-                bitRate: 128000,
-            },
-            web: {
-                mimeType: 'audio/mp3',
-                bitsPerSecond: 128000,
-            },
-        };
-
-        await recording.prepareToRecordAsync(recordingOptions);
-        await recording.startAsync();
-        console.log('Recording started');
-
-        return { fileName, recording };
-    } catch (error) {
-        console.error('Error starting recording:', error);
-        throw error;
+    if (playerStatus.isLoaded) {
+      if (!playerStatus.isPlaying) {
+        await recording.playAsync();
+      }
     }
+  } catch (error) {
+    console.error("Error playing recorded audio:", error);
+  }
 };
 
-const stopRecording = async (recording: Audio.Recording): Promise<string> => {
-    try {
-        if (recording) {
-            await recording.stopAndUnloadAsync();
-            const uri = recording.getURI();
-            console.log('Recording stopped. File saved at:', uri);
+const openFile = async (filePath: string) => {
+  try {
+    const fileInfo = await FileSystem.getInfoAsync(filePath);
 
-            if (!uri) {
-                throw new Error('Failed to retrieve recording URI');
-            }
+    if (fileInfo.exists) {
+      console.log('File exists:', filePath);
+      console.log('File Info:', fileInfo);
 
-            return uri;
-        } else {
-            throw new Error('No recording to stop');
-        }
-    } catch (error) {
-        console.error('Error stopping recording:', error);
-        throw error;
+    } else {
+      console.log('File does not exist at:', filePath);
     }
+  } catch (error) {
+    console.error('Error opening file:', error);
+  }
 };
 
-export { startRecording, stopRecording };
+const deleteFile = async (filePath: string) => {
+  try {
+    const fileInfo = await FileSystem.getInfoAsync(filePath);
+
+    if (fileInfo.exists) {
+      await FileSystem.deleteAsync(filePath);
+      console.log('File deleted:', filePath);
+    } else {
+      console.log('File does not exist, cannot delete:', filePath);
+    }
+  } catch (error) {
+    console.error('Error deleting file:', error);
+  }
+};
+
+const startRecording = async (
+  permissionResponse: Audio.PermissionResponse | null
+) => {
+  try {
+
+    if (permissionResponse?.status !== 'granted') {
+      console.log('Requesting permission...');
+      await Audio.requestPermissionsAsync();
+    }
+    console.log('Starting new recording...');
+    await Audio.setAudioModeAsync({
+      allowsRecordingIOS: true,
+      playsInSilentModeIOS: true,
+      interruptionModeIOS: InterruptionModeIOS.DoNotMix,
+      shouldDuckAndroid: true,
+      interruptionModeAndroid: InterruptionModeAndroid.DoNotMix,
+      playThroughEarpieceAndroid: false,
+      staysActiveInBackground: true,
+    });
+
+    const recording = new Audio.Recording();
+    await recording.prepareToRecordAsync();
+    await recording.startAsync();
+    console.log('Recording started');
+    return recording;
+  } catch (err) {
+    console.error('Failed to start recording', err);
+    return null;
+  }
+};
+
+const stopRecording = async (recording: Audio.Recording | null) => {
+  if (!recording) {
+    console.log('No recording is in progress');
+    return null;
+  }
+  console.log('Stopping recording...');
+  try {
+    await recording.stopAndUnloadAsync();
+    await Audio.setAudioModeAsync({
+      allowsRecordingIOS: false,
+      playsInSilentModeIOS: true,
+      shouldDuckAndroid: true,
+      playThroughEarpieceAndroid: false,
+      staysActiveInBackground: true,
+    });
+    const fileName = `recording-${Date.now()}.caf`;
+    const recordingUri = recording.getURI();
+
+    // Move the recording to the new directory with the new file name
+    await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'recordings/', { intermediates: true });
+    const filePath = FileSystem.documentDirectory + 'recordings/' + `${fileName}`
+    await FileSystem.moveAsync({
+      from: recordingUri ? recordingUri: "",
+      to: filePath
+    });
+    return filePath;
+  } catch (err) {
+    console.error('Failed to stop recording', err);
+    return null;
+  }
+};
+
+
+export { startRecording, stopRecording, playRecordedAudio, openFile, deleteFile };

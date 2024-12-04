@@ -43,7 +43,8 @@ interface InstrumentImages {
     [Clef.Bass]: ClefImages;
     [Clef.Treble]: ClefImages;
 
-    [Clef.Soprano]: ClefImages;
+  [Clef.Soprano]: ClefImages;
+  [Clef.MockSoprano]: ClefImages;
 
     tutorials: TutorialImages;
 }
@@ -115,8 +116,23 @@ const imagePathMap: ImagePathMap = {
         large: icon,
         small: favicon,
     },
-    inApp: {
-        notes: noteImage,
+    mockSoprano: {
+      large: {
+        C: cNoteSopranoLarge,
+        D: dNoteSopranoLarge,
+      },
+      medium: {
+        //make small images
+      },
+      small: {
+        C: cNoteSopranoSmall,
+      },
+
+      // ...TODO : add notes
+    },
+    tutorials: {
+      en: fluteTutorialEn,
+      de: fluteTutorialDe,
     },
 };
 

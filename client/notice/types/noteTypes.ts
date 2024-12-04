@@ -9,6 +9,7 @@ export enum Clef {
   Bass = 'bass',
   Alto = 'alto',
   Soprano = 'soprano',
+  MockSoprano = 'mockSoprano',
 }
 
 export enum InstrumentName {
