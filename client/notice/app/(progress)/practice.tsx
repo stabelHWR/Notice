@@ -22,8 +22,6 @@ import { getNotesData, getNotes, doesClefOrNoteExist, saveUpdatedNotesData } fro
 import { unloadSound, loadSound, playSound, stopSound } from '../util/playSound';
 import { deleteFile, openFile, startRecording, stopRecording } from '../util/recordSound';
 import LoadView from '../loadingScreen';
-import { getNoteFromRecording } from "@/app/util/getNoteFromRecord";
-import { Buffer } from 'buffer';
 
 
 interface PracticeProps {
@@ -42,36 +40,36 @@ const EvaluatedRecordingBox: React.FC<EvaluatedRecordingBoxProps> = ({
         evaluatedRecordingStatus === 'notRecordedInSession' ? 'notPlayed' : evaluatedRecordingStatus;
     const isHidden = evaluatedRecordingStatus === 'notRecordedInSession';
 
-  return (
-    <HStack style={{ height: 70, opacity: isHidden ? 0 : 1, width: '100%', alignItems: 'center',  flexDirection: 'row',}}>
-      <PlayedStatusIcon status={recordingStatus}/>
-      <InfoText displayedText={`${i18n.t('developmentSuggestion')}`} status={recordingStatus} />
-    </HStack>
-  );
+    return (
+        <HStack style={{ height: 70, opacity: isHidden ? 0 : 1, width: '100%', alignItems: 'center',  flexDirection: 'row',}}>
+            <PlayedStatusIcon status={recordingStatus}/>
+            <InfoText displayedText={`${i18n.t('developmentSuggestion')}`} status={recordingStatus} />
+        </HStack>
+    );
 };
 
 const PracticePage: React.FC<PracticeProps> = ({ selectedClef, selectedNoteName }) => {
-  const [currentlyDisplayedClef, setCurrentlyDisplayedClef] = useState<Clef>(
-    selectedClef ? (CLEFS.find((clef) => selectedClef === clef) ?? CLEFS[0]) : CLEFS[0]
-  );
-  const [currentlyDisplayedClefIndex, setCurrentlyDisplayedClefIndex] = useState(0);
-  const [notesData, setNotesData] = useState<NotesData>();
-  const [playedNotes, setPlayedNotes] = useState<NotePlay[]>([]);
-  const [currentNoteIndex, setCurrentNoteIndex] = useState(
-    selectedNoteName ? playedNotes.findIndex((note) => selectedNoteName === note.noteName) : 0
-  );
-  const [currentNote, setCurrentNote] = useState<null | NotePlay>(null);
-  const [recording, setRecording] = useState<Audio.Recording | null>(null);
-  const [permissionResponse] = Audio.usePermissions();
-  const [isRecording, setIsRecording] = useState(false);
-  const [resultsLoading, setResultsLoading] = useState(false);
-  const [resultStatus, setResultStatus] = useState<RecordingStatus>('notRecordedInSession');
-  const [sound, setSound] = useState<Audio.Sound | null>(null);
-  
-  useEffect(() => {
-    const fetchNotes = async () => {
-      const notesData = await getNotesData(currentlyDisplayedClef);
-      setNotesData(notesData);
+    const [currentlyDisplayedClef, setCurrentlyDisplayedClef] = useState<Clef>(
+        selectedClef ? (CLEFS.find((clef) => selectedClef === clef) ?? CLEFS[0]) : CLEFS[0]
+    );
+    const [currentlyDisplayedClefIndex, setCurrentlyDisplayedClefIndex] = useState(0);
+    const [notesData, setNotesData] = useState<NotesData>();
+    const [playedNotes, setPlayedNotes] = useState<NotePlay[]>([]);
+    const [currentNoteIndex, setCurrentNoteIndex] = useState(
+        selectedNoteName ? playedNotes.findIndex((note) => selectedNoteName === note.noteName) : 0
+    );
+    const [currentNote, setCurrentNote] = useState<null | NotePlay>(null);
+    const [recording, setRecording] = useState<Audio.Recording | null>(null);
+    const [permissionResponse] = Audio.usePermissions();
+    const [isRecording, setIsRecording] = useState(false);
+    const [resultsLoading, setResultsLoading] = useState(false);
+    const [resultStatus, setResultStatus] = useState<RecordingStatus>('notRecordedInSession');
+    const [sound, setSound] = useState<Audio.Sound | null>(null);
+
+    useEffect(() => {
+        const fetchNotes = async () => {
+            const notesData = await getNotesData(currentlyDisplayedClef);
+            setNotesData(notesData);
 
             const newPlayedNotes = getNotes(notesData);
             setPlayedNotes(newPlayedNotes);
@@ -115,8 +113,28 @@ const PracticePage: React.FC<PracticeProps> = ({ selectedClef, selectedNoteName 
                     );
                     setSound(newSound);
                 }
-        // setResultStatus('notRecordedInSession');
-      }
+
+                // setResultStatus('notRecordedInSession');
+            }
+        };
+
+        setNewNote();
+    }, [currentNoteIndex, currentNote, playedNotes, currentlyDisplayedClef]);
+
+    const changeNote = async (newIndex: number) => {
+        if (newIndex >= playedNotes.length) {
+            const newClefIndex = currentlyDisplayedClefIndex + 1;
+            if (newClefIndex < CLEFS.length) {
+                setCurrentlyDisplayedClefIndex(newClefIndex);
+                setCurrentNoteIndex(0);
+                setCurrentlyDisplayedClef(CLEFS[newClefIndex]);
+            }
+        } else {
+            setCurrentNoteIndex(newIndex);
+        }
+        setRecording(null);
+        setIsRecording(false);
+        setResultStatus('notRecordedInSession');
     };
 
     const startOrStopRecording = async () => {
@@ -125,55 +143,38 @@ const PracticePage: React.FC<PracticeProps> = ({ selectedClef, selectedNoteName 
 
         if (newIsRecording) {
             setResultStatus('notRecordedInSession');
-            try {
-                if (recording) {
-                    await recording.stopAndUnloadAsync();
-                    setRecording(null);
-                }
+            const newRecording = await startRecording(permissionResponse);
+            if(newRecording){
+                setRecording(newRecording);
+                stopSound(sound);
+            }
+        } else {
+            const filePath = await stopRecording(recording);
+            setResultsLoading(true)
+            if(filePath){
+                await openFile(filePath)
+                setTimeout(async () => {
+                    deleteFile(filePath)
+                }, 2000);
+            }
+            setRecording(null);
+            setResultsLoading(false)
+            const evaluatedRecordingResult: RecordingStatus = 'failed';
+            setResultStatus(evaluatedRecordingResult);
+            updateNoteStatus()
+        }
+    };
 
-                const { granted } = await Audio.requestPermissionsAsync();
-                if (!granted) {
-                    throw new Error('Permissions not granted to record audio');
-                }
+    const updateNoteStatus = () => {
+        if (!currentNote || !notesData) return;
 
-    if (newIsRecording) {
-      setResultStatus('notRecordedInSession');
-      const newRecording = await startRecording(permissionResponse);
-      if(newRecording){
-        setRecording(newRecording);
-        stopSound(sound);
-      }
-    } else {
-      const filePath = await stopRecording(recording);
-      setResultsLoading(true)
-      if(filePath){
-        await openFile(filePath)
-        setTimeout(async () => {
-          deleteFile(filePath)
-        }, 2000);
-      }
-      setRecording(null);
-      setResultsLoading(false)
-      const evaluatedRecordingResult: RecordingStatus = 'failed';
-      setResultStatus(evaluatedRecordingResult);
-      updateNoteStatus()
+        setCurrentlyDisplayedClef(Clef.MockSoprano)
     }
-  };
 
-  const updateNoteStatus = () => {
-    if (!currentNote || !notesData) return;
-
-    setCurrentlyDisplayedClef(Clef.MockSoprano)
-  }
-
-  return (
-    <>
-      {!currentNote || resultsLoading? (
-        <LoadView displayedText={resultsLoading ? i18n.t('noteAnalyzed'): undefined}/>
-      ) : (
+    return (
         <>
-            {!currentNote ? (
-                <LoadView />
+            {!currentNote || resultsLoading? (
+                <LoadView displayedText={resultsLoading ? i18n.t('noteAnalyzed'): undefined}/>
             ) : (
                 <>
                     <VStack style={{ marginTop: 40 }}>
@@ -217,36 +218,39 @@ const PracticePage: React.FC<PracticeProps> = ({ selectedClef, selectedNoteName 
                                 />
                             )}
 
-              <NotePlayImage
-                noteName={currentNote.noteName}
-                clef={currentlyDisplayedClef}
-                size="large"
-              />
-              {currentNoteIndex < playedNotes.length - 1 && !isRecording && (
-                <ScrollToTheSideButton
-                  onPress={() => changeNote(currentNoteIndex + 1)}
-                  isLeft={false}
-                />
-              )}
-            </HStack>
-            <VStack style={{ opacity: !isRecording ? 1 : 0 }}>
-              <PlayButton onPress={() => playSound(sound)} />
-            </VStack>
-          </VStack>
-          <VStack style={{ alignItems: 'center', marginTop: 2 }}>
-            <VStack style={{ opacity: isRecording ? 1 : 0, marginTop: 5 }}>
-              <ThreeNotes width={40} height={40} />
-            </VStack>
-            <EvaluatedRecordingBox evaluatedRecordingStatus={resultStatus} />
-            <RecordGradientButton
-              isRecording={!isRecording}
-              onPress={() => startOrStopRecording()}
-            />
-          </VStack>
+                            <NotePlayImage
+                                noteName={currentNote.noteName}
+                                clef={currentlyDisplayedClef}
+                                size="large"
+                            />
+                            {currentNoteIndex < playedNotes.length - 1 && !isRecording && (
+                                <ScrollToTheSideButton
+                                    onPress={() => changeNote(currentNoteIndex + 1)}
+                                    isLeft={false}
+                                />
+                            )}
+                        </HStack>
+                        <VStack style={{ opacity: !isRecording ? 1 : 0 }}>
+                            <PlayButton onPress={() => playSound(sound)} />
+                        </VStack>
+                    </VStack>
+                    <VStack style={{ alignItems: 'center', marginTop: 2 }}>
+                        <VStack style={{ opacity: isRecording ? 1 : 0, marginTop: 5 }}>
+                            <ThreeNotes width={40} height={40} />
+                        </VStack>
+                        <EvaluatedRecordingBox evaluatedRecordingStatus={resultStatus} />
+                        <RecordGradientButton
+                            isRecording={!isRecording}
+                            onPress={() => startOrStopRecording()}
+                        />
+                    </VStack>
+                </>
+            )}
         </>
     );
 };
 
+//TODO: figure out how we are going to save the player status. Make a separate file or save it in to the music files JSON. for now it is saved in the music files JSON
 export default function Practice() {
     const { selectedClef, selectedNoteName } = useGlobalSearchParams<{
         selectedClef?: string;
@@ -258,19 +262,19 @@ export default function Practice() {
         return <NotFoundScreen />;
     }
 
-  return (
-    <VStack style={containerStyles.mainContainerForPages}>
-      <BackButton
-        onPress={() =>
-          router.push({
-            pathname: './progress',
-            params: { selectedClef: Clef.MockSoprano },
-          })
-        }
-      />
-      <VStack style={containerStyles.mainCentralContainer}>
-        <PracticePage selectedNoteName={selectedNoteName} selectedClef={selectedClef} />
-      </VStack>
-    </VStack>
-  );
+    return (
+        <VStack style={containerStyles.mainContainerForPages}>
+            <BackButton
+                onPress={() =>
+                    router.push({
+                        pathname: './progress',
+                        params: { selectedClef: Clef.MockSoprano },
+                    })
+                }
+            />
+            <VStack style={containerStyles.mainCentralContainer}>
+                <PracticePage selectedNoteName={selectedNoteName} selectedClef={selectedClef} />
+            </VStack>
+        </VStack>
+    );
 }

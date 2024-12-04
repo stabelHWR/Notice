@@ -47,7 +47,7 @@ const translationsObj = {
     failed: "Unfortunately it was wrong",
     error: "Error",
     noteAnalyzed: "Note is getting analyzed",
-    developmentSuggestion: "Please play a note"
+    developmentSuggestion: "Please play a note",
     beginer: 'Beginer',
     amateur: 'Amateur',
     profi: 'Profi',
@@ -98,7 +98,7 @@ const translationsObj = {
     success: "Erfolgreich",
     error: "Fehlerhaft",
     noteAnalyzed: "Note wird analysiert", 
-    developmentSuggestion: "Bitte spiele eine Note"
+    developmentSuggestion: "Bitte spiele eine Note",
     beginer: 'Anfänger',
     amateur: 'Amateur',
     profi: 'Profi',

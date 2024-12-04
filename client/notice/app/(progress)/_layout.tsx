@@ -6,7 +6,6 @@ export default function WelcomeLayout() {
         <Stack>
             <Stack.Screen name="progress" options={{headerShown: false}}/>
             <Stack.Screen name="practice" options={{headerShown: false}}/>
-            <Stack.Screen name="practice_alone" options={{headerShown: false}}/>
         </Stack>
     );
 }

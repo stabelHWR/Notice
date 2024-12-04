@@ -14,10 +14,10 @@ import dNoteSopranoLarge from '@/assets/images/instruments/flute/clefs/soprano/l
 //small
 import cNoteSopranoSmall from '@/assets/images/instruments/flute/clefs/soprano/small/cNote.png';
 
-import {ImageSourcePropType} from 'react-native';
-import {Clef, InstrumentName} from '@/types/noteTypes';
-import {CustomSize, Languages} from '@/types/componentTypes';
-import {AllNoteNames} from '@/constants/texts/Notes';
+import { ImageSourcePropType } from 'react-native';
+import { Clef, InstrumentName } from '@/types/noteTypes';
+import { CustomSize, Languages } from '@/types/componentTypes';
+import { AllNoteNames } from '@/constants/texts/Notes';
 
 type ImageGroupKey = InstrumentName | 'icons' | 'inApp';
 
@@ -43,8 +43,8 @@ interface InstrumentImages {
     [Clef.Bass]: ClefImages;
     [Clef.Treble]: ClefImages;
 
-  [Clef.Soprano]: ClefImages;
-  [Clef.MockSoprano]: ClefImages;
+    [Clef.Soprano]: ClefImages;
+    [Clef.MockSoprano]: ClefImages;
 
     tutorials: TutorialImages;
 }
@@ -52,7 +52,6 @@ interface InstrumentImages {
 interface IconImages {
     [size: string]: ImageSourcePropType;
 }
-
 interface InAppImages {
     [key: string]: ImageSourcePropType;
 }
@@ -107,6 +106,20 @@ const imagePathMap: ImagePathMap = {
 
             // ...TODO : add notes
         },
+        mockSoprano: {
+            large: {
+                C: cNoteSopranoLarge,
+                D: dNoteSopranoLarge,
+            },
+            medium: {
+                //make small images
+            },
+            small: {
+                C: cNoteSopranoSmall,
+            },
+
+            // ...TODO : add notes
+        },
         tutorials: {
             en: fluteTutorialEn,
             de: fluteTutorialDe,
@@ -116,23 +129,8 @@ const imagePathMap: ImagePathMap = {
         large: icon,
         small: favicon,
     },
-    mockSoprano: {
-      large: {
-        C: cNoteSopranoLarge,
-        D: dNoteSopranoLarge,
-      },
-      medium: {
-        //make small images
-      },
-      small: {
-        C: cNoteSopranoSmall,
-      },
-
-      // ...TODO : add notes
-    },
-    tutorials: {
-      en: fluteTutorialEn,
-      de: fluteTutorialDe,
+    inApp: {
+        notes: noteImage,
     },
 };
 
