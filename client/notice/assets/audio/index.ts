@@ -1,6 +1,17 @@
 //This file exists to map the audio files
-import soundC from '@/assets/audio/playSounds/instruments/flute/Sample.mp3';
 import { Clef, InstrumentName } from '@/types/noteTypes';
+import soundC from '@/assets/audio/playSounds/instruments/flute/C.mp3';
+import soundCSharp from '@/assets/audio/playSounds/instruments/flute/C#.mp3';
+import soundD from '@/assets/audio/playSounds/instruments/flute/D.mp3'
+import soundDSharp from '@/assets/audio/playSounds/instruments/flute/D#.mp3';
+import soundE from '@/assets/audio/playSounds/instruments/flute/E.mp3'
+import soundF from '@/assets/audio/playSounds/instruments/flute/F.mp3'
+import soundFSharp from '@/assets/audio/playSounds/instruments/flute/F#.mp3';
+import soundG from '@/assets/audio/playSounds/instruments/flute/G.mp3'
+import soundGSharp from '@/assets/audio/playSounds/instruments/flute/G#.mp3';
+import soundA from '@/assets/audio/playSounds/instruments/flute/A.mp3'
+import soundASharp from '@/assets/audio/playSounds/instruments/flute/A#.mp3';
+import soundB from '@/assets/audio/playSounds/instruments/flute/B.mp3'
 
 interface ClefSound {
   [noteName: string]: number;
@@ -33,12 +44,22 @@ const soundPathMap: SoundPathMap = {
     },
     soprano: {
       C: soundC,
-      D: soundC,
-      // ...TODO : add notes
+      CSharp: soundCSharp,
+      D: soundD,
+      DSharp: soundDSharp,
+      E: soundE,
+      F: soundF,
+      FSharp: soundFSharp,
+      G: soundG,
+      GSharp: soundGSharp,
+      A: soundA,
+      ASharp: soundASharp,
+      B: soundB,
+      // ...TODO : add notes in the audio/playSounds/instruments/flute directory
     },
     mockSoprano: {
       C: soundC,
-      D: soundC,
+      D: soundD,
       // ...TODO : add notes
     },
   },

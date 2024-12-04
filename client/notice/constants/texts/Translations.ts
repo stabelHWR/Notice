@@ -48,6 +48,10 @@ const translationsObj = {
     error: "Error",
     noteAnalyzed: "Note is getting analyzed",
     developmentSuggestion: "Please play a note"
+    beginer: 'Beginer',
+    amateur: 'Amateur',
+    profi: 'Profi',
+    question1: 'What is your current level?',
   },
   de: {
     welcome: 'Wilkommen',
@@ -95,6 +99,10 @@ const translationsObj = {
     error: "Fehlerhaft",
     noteAnalyzed: "Note wird analysiert", 
     developmentSuggestion: "Bitte spiele eine Note"
+    beginer: 'Anfänger',
+    amateur: 'Amateur',
+    profi: 'Profi',
+    question1: 'Was ist dein aktuelles Level?',
   },
 };
 

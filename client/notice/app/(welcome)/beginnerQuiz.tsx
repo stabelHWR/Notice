@@ -26,7 +26,6 @@ export default function BeginnerQuiz() {
         <GradientHeading type="heading" displayedText={APP_NAME} />
         <OneNote width={50} height={50} />
       </HStack>
-      <Logo size="medium" />
       <VStack style={containerStyles.mainFlexStartContainer}>
         {currentQuestion.type === 'multipleChoice' ? (
           <CustomDropdown

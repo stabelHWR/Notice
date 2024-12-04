@@ -14,10 +14,10 @@ import dNoteSopranoLarge from '@/assets/images/instruments/flute/clefs/soprano/l
 //small
 import cNoteSopranoSmall from '@/assets/images/instruments/flute/clefs/soprano/small/cNote.png';
 
-import { ImageSourcePropType } from 'react-native';
-import { Clef, InstrumentName } from '@/types/noteTypes';
-import { CustomSize, Languages } from '@/types/componentTypes';
-import { AllNoteNames } from '@/constants/texts/Notes';
+import {ImageSourcePropType} from 'react-native';
+import {Clef, InstrumentName} from '@/types/noteTypes';
+import {CustomSize, Languages} from '@/types/componentTypes';
+import {AllNoteNames} from '@/constants/texts/Notes';
 
 type ImageGroupKey = InstrumentName | 'icons' | 'inApp';
 
@@ -29,82 +29,92 @@ type TutorialKeys = Languages;
 type AllKeys = InAppImagesKey | NoteKeys | IconKeys | TutorialKeys;
 
 interface ClefImages {
-  large: { [note: string]: ImageSourcePropType };
-  medium: { [note: string]: ImageSourcePropType };
-  small: { [note: string]: ImageSourcePropType };
+    large: { [note: string]: ImageSourcePropType };
+    medium: { [note: string]: ImageSourcePropType };
+    small: { [note: string]: ImageSourcePropType };
 }
 
 type TutorialImages = {
-  [language in TutorialKeys]: ImageSourcePropType;
+    [language in TutorialKeys]: ImageSourcePropType;
 };
 
 interface InstrumentImages {
-  [Clef.Alto]: ClefImages;
-  [Clef.Bass]: ClefImages;
-  [Clef.Treble]: ClefImages;
+    [Clef.Alto]: ClefImages;
+    [Clef.Bass]: ClefImages;
+    [Clef.Treble]: ClefImages;
 
   [Clef.Soprano]: ClefImages;
   [Clef.MockSoprano]: ClefImages;
 
-  tutorials: TutorialImages;
+    tutorials: TutorialImages;
 }
 
 interface IconImages {
-  [size: string]: ImageSourcePropType;
+    [size: string]: ImageSourcePropType;
 }
+
 interface InAppImages {
-  [key: string]: ImageSourcePropType;
+    [key: string]: ImageSourcePropType;
 }
 
 interface ImagePathMap {
-  flute: InstrumentImages;
-  icons: IconImages;
-  inApp: InAppImages;
+    flute: InstrumentImages;
+    icons: IconImages;
+    inApp: InAppImages;
 }
 
 // Map of images
 const imagePathMap: ImagePathMap = {
-  flute: {
-    treble: {
-      large: {},
-      medium: {
-        //make small images
-      },
-      small: {
-        //make small images
-      },
-    },
-    bass: {
-      large: {},
-      medium: {
-        //make small images
-      },
-      small: {
-        //make small images
-      },
-    },
-    alto: {
-      large: {},
-      medium: {
-        //make small images
-      },
-      small: {
-        //make small images
-      },
-    },
-    soprano: {
-      large: {
-        C: cNoteSopranoLarge,
-        D: dNoteSopranoLarge,
-      },
-      medium: {
-        //make small images
-      },
-      small: {
-        C: cNoteSopranoSmall,
-      },
+    flute: {
+        treble: {
+            large: {},
+            medium: {
+                //make small images
+            },
+            small: {
+                //make small images
+            },
+        },
+        bass: {
+            large: {},
+            medium: {
+                //make small images
+            },
+            small: {
+                //make small images
+            },
+        },
+        alto: {
+            large: {},
+            medium: {
+                //make small images
+            },
+            small: {
+                //make small images
+            },
+        },
+        soprano: {
+            large: {
+                C: cNoteSopranoLarge,
+                D: dNoteSopranoLarge,
+            },
+            medium: {
+                //make small images
+            },
+            small: {
+                C: cNoteSopranoSmall,
+            },
 
-      // ...TODO : add notes
+            // ...TODO : add notes
+        },
+        tutorials: {
+            en: fluteTutorialEn,
+            de: fluteTutorialDe,
+        },
+    },
+    icons: {
+        large: icon,
+        small: favicon,
     },
     mockSoprano: {
       large: {
@@ -124,80 +134,72 @@ const imagePathMap: ImagePathMap = {
       en: fluteTutorialEn,
       de: fluteTutorialDe,
     },
-  },
-  icons: {
-    large: icon,
-    small: favicon,
-  },
-  inApp: {
-    notes: noteImage,
-  },
 };
 
 const returnImageOrLogWarning = (image: ImageSourcePropType, imageKey: AllKeys) => {
-  if (image) {
-    return image;
-  } else {
-    console.warn(`No image found for ${imageKey}`);
-  }
+    if (image) {
+        return image;
+    } else {
+        console.warn(`No image found for ${imageKey}`);
+    }
 };
 
 const getNoteImage = (
-  instrument: InstrumentName,
-  imageKey: AllNoteNames | TutorialKeys,
-  size: CustomSize,
-  clefKey?: Clef
+    instrument: InstrumentName,
+    imageKey: AllNoteNames | TutorialKeys,
+    size: CustomSize,
+    clefKey?: Clef
 ): ImageSourcePropType | undefined => {
-  const instrumentImageGroup = imagePathMap[instrument];
+    const instrumentImageGroup = imagePathMap[instrument];
 
-  if (!instrumentImageGroup) {
-    console.warn(`No such instrument ${instrument}`);
-    return undefined;
-  }
+    if (!instrumentImageGroup) {
+        console.warn(`No such instrument ${instrument}`);
+        return undefined;
+    }
 
-  if (clefKey && instrumentImageGroup[clefKey]) {
-    const clefImageGroup = instrumentImageGroup[clefKey][size] as {
-      [note: string]: ImageSourcePropType;
-    };
+    if (clefKey && instrumentImageGroup[clefKey]) {
+        const clefImageGroup = instrumentImageGroup[clefKey][size] as {
+            [note: string]: ImageSourcePropType;
+        };
 
-    const imageNoteKey = imageKey as AllNoteNames;
-    const clefImage = clefImageGroup[imageNoteKey];
+        const imageNoteKey = imageKey as AllNoteNames;
+        const clefImage = clefImageGroup[imageNoteKey];
 
-    return returnImageOrLogWarning(clefImage, imageNoteKey);
-  } else if (!clefKey && imageKey in instrumentImageGroup.tutorials) {
-    const tutorialImageKey = imageKey as TutorialKeys;
-    const tutorialImage = instrumentImageGroup.tutorials[tutorialImageKey];
+        return returnImageOrLogWarning(clefImage, imageNoteKey);
+    } else if (!clefKey && imageKey in instrumentImageGroup.tutorials) {
+        const tutorialImageKey = imageKey as TutorialKeys;
+        const tutorialImage = instrumentImageGroup.tutorials[tutorialImageKey];
 
-    return returnImageOrLogWarning(tutorialImage, tutorialImageKey);
-  } else {
-    console.warn(`No such clef ${clefKey} or invalid image key ${imageKey}`);
-    return undefined;
-  }
+        return returnImageOrLogWarning(tutorialImage, tutorialImageKey);
+    } else {
+        console.warn(`No such clef ${clefKey} or invalid image key ${imageKey}`);
+        return undefined;
+    }
 };
 
 export default function getImage(
-  imageGroupKey: ImageGroupKey,
-  imageKey: AllKeys | string,
-  clefKey?: Clef,
-  size?: CustomSize
+    imageGroupKey: ImageGroupKey,
+    imageKey: AllKeys | string,
+    clefKey?: Clef,
+    size?: CustomSize
 ): ImageSourcePropType | undefined {
-  const isInstrument = Object.values(InstrumentName).includes(imageGroupKey as InstrumentName);
-  if (isInstrument) {
-    const instrument = imageGroupKey as InstrumentName;
-    const usedSize = size ? size : 'large';
-    const noteImage = getNoteImage(instrument, imageKey as AllNoteNames, usedSize, clefKey);
-    return noteImage;
-  } else if (imageGroupKey === 'icons') {
-    const iconImageKey = imageKey as IconKeys;
-    const image = imagePathMap.icons[iconImageKey];
+    const isInstrument = Object.values(InstrumentName).includes(imageGroupKey as InstrumentName);
+    if (isInstrument) {
+        const instrument = imageGroupKey as InstrumentName;
+        const usedSize = size ? size : 'large';
+        const noteImage = getNoteImage(instrument, imageKey as AllNoteNames, usedSize, clefKey);
+        return noteImage;
+    } else if (imageGroupKey === 'icons') {
+        const iconImageKey = imageKey as IconKeys;
+        const image = imagePathMap.icons[iconImageKey];
 
-    return returnImageOrLogWarning(image, iconImageKey);
-  } else if (imageGroupKey === 'inApp') {
-    const inAppImageKey = imageKey as InAppImagesKey;
-    const image = imagePathMap.inApp[inAppImageKey];
-    return returnImageOrLogWarning(image, inAppImageKey);
-  } else {
-    console.warn(`No images group found for ${imageGroupKey}`);
-  }
-  return undefined;
+        return returnImageOrLogWarning(image, iconImageKey);
+    } else if (imageGroupKey === 'inApp') {
+        const inAppImageKey = imageKey as InAppImagesKey;
+        const image = imagePathMap.inApp[inAppImageKey];
+        return returnImageOrLogWarning(image, inAppImageKey);
+    } else {
+        console.warn(`No images group found for ${imageGroupKey}`);
+    }
+    return undefined;
 }
